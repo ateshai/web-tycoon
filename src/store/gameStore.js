@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { INITIAL_RESOURCES, MARKET_ITEMS } from '../logic/constants'
+import { INITIAL_RESOURCES, MARKET_ITEMS, BUILDINGS } from '../logic/constants'
 import { meetsRequirements, getUpgradeMultiplier } from '../logic/gameLogic'
 import { playTradeSound } from '../logic/audio'
 import i18n from '../i18n'
