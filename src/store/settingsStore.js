@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import i18n from '../i18n'
 
 export const useSettingsStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       // Audio settings
       soundEnabled: true,
       musicEnabled: true,
@@ -13,10 +14,17 @@ export const useSettingsStore = create(
       // Display settings
       theme: 'dark',
       notifications: true,
+      language: 'tr',
       
       // Actions
       loadSettings: () => {
-        // Load settings from localStorage or use defaults
+        const lang = get().language || 'tr'
+        i18n.changeLanguage(lang)
+      },
+
+      setLanguage: (language) => {
+        set({ language })
+        i18n.changeLanguage(language)
       },
       
       updateSoundSettings: (settings) => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import Navigation from '../UI/Navigation'
 import CityView from '../Screens/CityView'
 import MarketView from '../Screens/MarketView'
@@ -11,6 +12,7 @@ import ToastContainer from '../UI/ToastContainer'
 import { useGameStore } from '../../store/gameStore'
 
 const GameView = () => {
+  const { t } = useTranslation()
   const [currentScreen, setCurrentScreen] = useState('city')
   const [isBuildOpen, setIsBuildOpen] = useState(false)
   const activeResearch = useGameStore(state => state.activeResearch)
@@ -59,9 +61,9 @@ const GameView = () => {
               <div className="research-banner-info">
                 <span className="banner-icon">🔬</span>
                 <span className="banner-title">
-                  Researching: <strong>{researchProgress.name}</strong>
+                  {t('app.researching')}: <strong>{t(`upgrades.${activeResearch.upgrade.id}.name`, activeResearch.upgrade.name)}</strong>
                 </span>
-                <span className="banner-countdown">{researchProgress.remaining}s left</span>
+                <span className="banner-countdown">{researchProgress.remaining}s {t('app.left')}</span>
               </div>
               <div className="research-header-progress-track">
                 <div
@@ -73,7 +75,7 @@ const GameView = () => {
           ) : (
             <div className="game-logo">
               <span className="logo-icon">🏰</span>
-              <span className="logo-text">HTML Tycoon</span>
+              <span className="logo-text">{t('app.title')}</span>
             </div>
           )}
         </header>

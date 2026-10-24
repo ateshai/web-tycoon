@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
 import { MARKET_ITEMS } from '../../logic/constants'
 import { formatNumber } from '../../logic/utils'
 
 const MarketView = () => {
+  const { t } = useTranslation()
   const [selectedTab, setSelectedTab] = useState('sell')
   const [activeFeedback, setActiveFeedback] = useState({}) // { [itemId]: { text, type, id } }
   const [balancePulse, setBalancePulse] = useState(null) // 'gain' | 'spend' | null
@@ -49,14 +51,16 @@ const MarketView = () => {
   }
 
   const handleSell = (item, amount) => {
-    const res = sellResource(item.id, amount, item.sellPrice, item.name)
+    const itemName = t(`items.${item.id}.name`, item.name)
+    const res = sellResource(item.id, amount, item.sellPrice, itemName)
     if (res?.success) {
       triggerFeedback(item.id, `+$${formatNumber(res.earnings)}`, 'gain')
     }
   }
 
   const handleBuy = (item, amount) => {
-    const res = buyResource(item.id, amount, item.buyPrice, item.name)
+    const itemName = t(`items.${item.id}.name`, item.name)
+    const res = buyResource(item.id, amount, item.buyPrice, itemName)
     if (res?.success) {
       triggerFeedback(item.id, `-$${formatNumber(res.cost)}`, 'spend')
     }
@@ -66,13 +70,13 @@ const MarketView = () => {
     <div className="screen market-view">
       <div className="market-header">
         <div>
-          <h1>City Market</h1>
+          <h1>{t('market.title')}</h1>
           <p className="market-subtitle">
-            Trade your manufactured goods for money or purchase raw construction supplies.
+            {t('market.subtitle')}
           </p>
         </div>
         <div className={`market-balance-pill ${balancePulse ? `pulse-${balancePulse}` : ''}`}>
-          <span>💰 Cash: <strong>${formatNumber(money)}</strong></span>
+          <span>💰 {t('market.cash')}: <strong>${formatNumber(money)}</strong></span>
         </div>
       </div>
 
@@ -81,25 +85,27 @@ const MarketView = () => {
           variant={selectedTab === 'sell' ? 'primary' : 'secondary'}
           onClick={() => setSelectedTab('sell')}
         >
-          Sell Goods 💰
+          {t('market.sellTab')}
         </Button>
         <Button
           variant={selectedTab === 'buy' ? 'primary' : 'secondary'}
           onClick={() => setSelectedTab('buy')}
         >
-          Buy Supplies 🛒
+          {t('market.buyTab')}
         </Button>
       </div>
 
       <div className="market-content">
         {selectedTab === 'sell' ? (
           <div className="trade-section">
-            <h2>Sell Your Manufactured Products</h2>
+            <h2>{t('market.sellSectionTitle')}</h2>
             <div className="market-grid">
               {Object.values(MARKET_ITEMS).map(item => {
                 const currentAmount = Math.floor(playerResources[item.id] || 0)
                 const totalValue = currentAmount * item.sellPrice
                 const feedback = activeFeedback[item.id]
+                const itemName = t(`items.${item.id}.name`, item.name)
+                const itemDescription = t(`items.${item.id}.description`, item.description)
 
                 return (
                   <div
@@ -115,22 +121,22 @@ const MarketView = () => {
                     <div className="market-card-top">
                       <span className="market-item-icon">{item.icon}</span>
                       <div>
-                        <h3>{item.name}</h3>
-                        <p className="item-description">{item.description}</p>
+                        <h3>{itemName}</h3>
+                        <p className="item-description">{itemDescription}</p>
                       </div>
                     </div>
 
                     <div className="market-card-stats">
                       <div className="stat-row">
-                        <span>Sell Price:</span>
-                        <strong className="text-success">${item.sellPrice} / unit</strong>
+                        <span>{t('market.sellPrice')}:</span>
+                        <strong className="text-success">${item.sellPrice} / {t('resources.units')}</strong>
                       </div>
                       <div className="stat-row">
-                        <span>In Storage:</span>
-                        <strong>{formatNumber(currentAmount)} units</strong>
+                        <span>{t('market.inStorage')}:</span>
+                        <strong>{formatNumber(currentAmount)} {t('resources.units')}</strong>
                       </div>
                       <div className="stat-row">
-                        <span>Total Inventory Value:</span>
+                        <span>{t('market.totalValue')}:</span>
                         <strong>${formatNumber(totalValue)}</strong>
                       </div>
                     </div>
@@ -140,26 +146,26 @@ const MarketView = () => {
                         onClick={() => handleSell(item, 1)}
                         disabled={currentAmount < 1}
                       >
-                        Sell 1 (+${item.sellPrice})
+                        {t('market.sell1', { price: item.sellPrice })}
                       </Button>
                       <Button
                         onClick={() => handleSell(item, 10)}
                         disabled={currentAmount < 10}
                       >
-                        Sell 10 (+${item.sellPrice * 10})
+                        {t('market.sell10', { price: item.sellPrice * 10 })}
                       </Button>
                       <Button
                         onClick={() => handleSell(item, 50)}
                         disabled={currentAmount < 50}
                       >
-                        Sell 50 (+${item.sellPrice * 50})
+                        {t('market.sell50', { price: item.sellPrice * 50 })}
                       </Button>
                       <Button
                         variant="secondary"
                         onClick={() => handleSell(item, currentAmount)}
                         disabled={currentAmount <= 0}
                       >
-                        Sell All (+${formatNumber(totalValue)})
+                        {t('market.sellAll', { value: formatNumber(totalValue) })}
                       </Button>
                     </div>
                   </div>
@@ -169,11 +175,13 @@ const MarketView = () => {
           </div>
         ) : (
           <div className="trade-section">
-            <h2>Buy Construction Supplies</h2>
+            <h2>{t('market.buySectionTitle')}</h2>
             <div className="market-grid">
               {Object.values(MARKET_ITEMS).map(item => {
                 const currentStock = Math.floor(playerResources[item.id] || 0)
                 const feedback = activeFeedback[item.id]
+                const itemName = t(`items.${item.id}.name`, item.name)
+                const itemDescription = t(`items.${item.id}.description`, item.description)
 
                 return (
                   <div
@@ -189,19 +197,19 @@ const MarketView = () => {
                     <div className="market-card-top">
                       <span className="market-item-icon">{item.icon}</span>
                       <div>
-                        <h3>{item.name}</h3>
-                        <p className="item-description">{item.description}</p>
+                        <h3>{itemName}</h3>
+                        <p className="item-description">{itemDescription}</p>
                       </div>
                     </div>
 
                     <div className="market-card-stats">
                       <div className="stat-row">
-                        <span>Buy Price:</span>
-                        <strong className="text-warning">${item.buyPrice} / unit</strong>
+                        <span>{t('market.buyPrice')}:</span>
+                        <strong className="text-warning">${item.buyPrice} / {t('resources.units')}</strong>
                       </div>
                       <div className="stat-row">
-                        <span>Current Stock:</span>
-                        <strong>{formatNumber(currentStock)} units</strong>
+                        <span>{t('market.currentStock')}:</span>
+                        <strong>{formatNumber(currentStock)} {t('resources.units')}</strong>
                       </div>
                     </div>
 
@@ -210,19 +218,19 @@ const MarketView = () => {
                         onClick={() => handleBuy(item, 1)}
                         disabled={money < item.buyPrice}
                       >
-                        Buy 1 (-${item.buyPrice})
+                        {t('market.buy1', { price: item.buyPrice })}
                       </Button>
                       <Button
                         onClick={() => handleBuy(item, 10)}
                         disabled={money < item.buyPrice * 10}
                       >
-                        Buy 10 (-${item.buyPrice * 10})
+                        {t('market.buy10', { price: item.buyPrice * 10 })}
                       </Button>
                       <Button
                         onClick={() => handleBuy(item, 50)}
                         disabled={money < item.buyPrice * 50}
                       >
-                        Buy 50 (-${item.buyPrice * 50})
+                        {t('market.buy50', { price: item.buyPrice * 50 })}
                       </Button>
                     </div>
                   </div>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import { BUILDINGS } from '../../logic/constants'
 import Button from './Button'
 
 const ResearchCompleteModal = () => {
+  const { t } = useTranslation()
   const completedResearch = useGameStore(state => state.completedResearch)
   const dismissCompletedResearch = useGameStore(state => state.dismissCompletedResearch)
   const [countdown, setCountdown] = useState(5)
@@ -32,11 +34,16 @@ const ResearchCompleteModal = () => {
     ? Object.values(BUILDINGS).find(b => b.id.toLowerCase() === completedResearch.unlocks.toLowerCase())
     : null
 
+  const upgradeName = t(`upgrades.${completedResearch.id}.name`, completedResearch.name)
+  const upgradeDesc = t(`upgrades.${completedResearch.id}.description`, completedResearch.description)
+  const buildingName = unlockedBuilding ? t(`buildings.${unlockedBuilding.id}.name`, unlockedBuilding.name) : ''
+  const affectsTarget = completedResearch.affects ? t(`buildings.${completedResearch.affects}.name`, completedResearch.affects) : ''
+
   return (
     <div className="modal-backdrop completion-backdrop" onClick={dismissCompletedResearch}>
       <div className="modal-container completion-modal" onClick={e => e.stopPropagation()}>
         <div className="completion-confetti-header">
-          <span className="celebration-badge">🔬 Research Breakthrough!</span>
+          <span className="celebration-badge">{t('research.modal.title')}</span>
           <button
             className="modal-close-button"
             onClick={dismissCompletedResearch}
@@ -51,15 +58,15 @@ const ResearchCompleteModal = () => {
             <span className="breakthrough-icon">💡</span>
           </div>
 
-          <h2>{completedResearch.name}</h2>
-          <p className="completion-description">{completedResearch.description}</p>
+          <h2>{upgradeName}</h2>
+          <p className="completion-description">{upgradeDesc}</p>
 
           <div className="completion-benefit-box">
-            <span className="benefit-label">ACTIVE BENEFIT</span>
+            <span className="benefit-label">{t('research.modal.activeBenefit')}</span>
             <strong className="benefit-value text-success">
               {unlockedBuilding
-                ? `🏗️ Unlocked New Building: ${unlockedBuilding.name} (Ready in Build Menu!)`
-                : `⚡ +${Math.round((completedResearch.multiplier || 0) * 100)}% Production Bonus for ${completedResearch.affects}`}
+                ? t('research.modal.unlockedDesc', { name: buildingName })
+                : t('research.modal.bonusDesc', { bonus: Math.round((completedResearch.multiplier || 0) * 100), target: affectsTarget })}
             </strong>
           </div>
 
@@ -69,14 +76,14 @@ const ResearchCompleteModal = () => {
               style={{ width: `${(countdown / 5) * 100}%` }}
             />
           </div>
-          <span className="countdown-text">Auto-closing in {countdown}s...</span>
+          <span className="countdown-text">{t('research.modal.autoClosing', { count: countdown })}</span>
 
           <Button
             variant="primary"
             className="claim-research-btn"
             onClick={dismissCompletedResearch}
           >
-            Awesome! Continue Playing
+            {t('research.modal.continueBtn')}
           </Button>
         </div>
       </div>

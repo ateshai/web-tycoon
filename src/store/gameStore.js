@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { INITIAL_RESOURCES, MARKET_ITEMS } from '../logic/constants'
 import { meetsRequirements, getUpgradeMultiplier } from '../logic/gameLogic'
 import { playTradeSound } from '../logic/audio'
+import i18n from '../i18n'
 
 export const useGameStore = create(
   persist(
@@ -224,13 +225,13 @@ export const useGameStore = create(
           playTradeSound('sell')
 
           const itemConfig = MARKET_ITEMS[resourceKey.toUpperCase()]
-          const itemName = customName || itemConfig?.name || resourceKey
+          const itemName = customName || i18n.t(`items.${resourceKey}.name`, itemConfig?.name || resourceKey)
 
           get().addNotification({
             type: 'success',
             icon: '💰',
-            title: 'Satış Yapıldı!',
-            message: `${sellAmount}x ${itemName} satıldı`,
+            title: i18n.t('market.toast.saleSuccessTitle'),
+            message: i18n.t('market.toast.saleSuccessMsg', { count: sellAmount, name: itemName }),
             badge: `+$${earnings}`,
             duration: 3500
           })
@@ -255,13 +256,13 @@ export const useGameStore = create(
           playTradeSound('buy')
 
           const itemConfig = MARKET_ITEMS[resourceKey.toUpperCase()]
-          const itemName = customName || itemConfig?.name || resourceKey
+          const itemName = customName || i18n.t(`items.${resourceKey}.name`, itemConfig?.name || resourceKey)
 
           get().addNotification({
             type: 'buy',
             icon: '🛒',
-            title: 'Satın Alındı!',
-            message: `${amount}x ${itemName} depoya eklendi`,
+            title: i18n.t('market.toast.buySuccessTitle'),
+            message: i18n.t('market.toast.buySuccessMsg', { count: amount, name: itemName }),
             badge: `-$${totalCost}`,
             duration: 3500
           })

@@ -1,0 +1,187 @@
+{
+  "app": {
+    "title": "HTML Tycoon",
+    "researching": "Araştırılıyor",
+    "left": "kaldı"
+  },
+  "nav": {
+    "city": "Şehir",
+    "market": "Market",
+    "build": "İnşa Et",
+    "research": "Araştırma",
+    "settings": "Ayarlar"
+  },
+  "resources": {
+    "money": "Nakit / Hazine",
+    "moneyDesc": "Bina inşa etmek, malzeme almak ve ticaret yapmak için kullanılır.",
+    "wood": "Odun",
+    "woodDesc": "Oduncular tarafından ormanlardan toplanan ham inşaat malzemesi.",
+    "plank": "Tahta",
+    "plankDesc": "Marangozlar tarafından işlenmiş kaliteli kereste.",
+    "stone": "Taş",
+    "stoneDesc": "Taş ustaları tarafından ocaklardan çıkarılan ağır yapı malzemesi.",
+    "knowledge": "Bilgi",
+    "knowledgeDesc": "Yeni teknolojileri ve geliştirmeleri açmak için kullanılan bilimsel birikim.",
+    "experience": "Deneyim",
+    "experienceDesc": "Şehir geliştirdikçe ve hedeflere ulaştıkça kazanılan tecrübe puanı.",
+    "units": "adet",
+    "points": "puan",
+    "xp": "XP",
+    "rate": "Hız"
+  },
+  "city": {
+    "title": "Şehir Kontrol Paneli",
+    "subtitle": "Şehrinizin toplam envanteri, üretim kapasitesi ve aktif binalarının genel özeti.",
+    "constructBtn": "🔨 Bina İnşa Et",
+    "inventoryTitle": "📦 Şehir Envanteri & Depo",
+    "commoditiesCount": "{{count}} Kaynak Türü",
+    "productionTitle": "⚡ Üretim Özeti",
+    "yieldBadge": "Saniye Başına Verim",
+    "woodYield": "Odun Üretimi",
+    "plankYield": "Tahta Üretimi",
+    "stoneYield": "Taş Üretimi",
+    "knowledgeYield": "Bilgi Üretimi",
+    "activeBuildingsTitle": "🏛️ Şehirdeki Aktif Binalar",
+    "structuresCount": "{{count}} Toplam Yapı",
+    "emptyBuildingsTitle": "Henüz Hiç Bina İnşa Edilmedi",
+    "emptyBuildingsDesc": "Şehrinizin kaynak ve bilgi üretmeye başlaması için üretim binalarına ihtiyacı var.",
+    "openBuildMenu": "İnşaat Menüsünü Aç"
+  },
+  "market": {
+    "title": "Şehir Pazarı",
+    "subtitle": "Ürettiğiniz malları nakit karşılığı satın veya ham inşaat malzemeleri tedarik edin.",
+    "cash": "Nakit",
+    "sellTab": "Ürün Sat 💰",
+    "buyTab": "Malzeme Al 🛒",
+    "sellSectionTitle": "Ürettiğiniz Malları Satın",
+    "buySectionTitle": "İnşaat Malzemeleri Satın Alın",
+    "sellPrice": "Satış Fiyatı",
+    "buyPrice": "Alış Fiyatı",
+    "inStorage": "Depodaki Miktar",
+    "totalValue": "Toplam Envanter Değeri",
+    "currentStock": "Mevcut Stok",
+    "sell1": "1 Sat (+${{price}})",
+    "sell10": "10 Sat (+${{price}})",
+    "sell50": "50 Sat (+${{price}})",
+    "sellAll": "Tümünü Sat (+${{value}})",
+    "buy1": "1 Al (-${{price}})",
+    "buy10": "10 Al (-${{price}})",
+    "buy50": "50 Al (-${{price}})",
+    "toast": {
+      "saleSuccessTitle": "Satış Yapıldı!",
+      "saleSuccessMsg": "{{count}}x {{name}} satıldı",
+      "buySuccessTitle": "Satın Alındı!",
+      "buySuccessMsg": "{{count}}x {{name}} depoya eklendi"
+    }
+  },
+  "research": {
+    "title": "Araştırma & Geliştirme",
+    "subtitle": "Şehrinizin yeteneklerini geliştirmek için Bilginizi süreli teknolojik araştırmalara yatırın.",
+    "availableKnowledge": "Mevcut Bilgi",
+    "cost": "Maliyet",
+    "researchTime": "Araştırma Süresi",
+    "seconds": "saniye",
+    "effect": "Etki",
+    "requires": "Gereksinim",
+    "unlocksBuilding": "{{name}} binasının kilidini açar",
+    "productionBonus": "{{target}} için +%{{bonus}} üretim bonusu",
+    "statusResearched": "Tamamlandı",
+    "statusResearching": "Araştırılıyor...",
+    "btnResearched": "Tamamlandı ✔️",
+    "btnInProgress": "Devam Ediyor ⏳",
+    "btnQueueBusy": "Kuyruk Meşgul (Bekleyin)",
+    "btnStart": "Araştırmayı Başlat ({{duration}}sn)",
+    "modal": {
+      "title": "🔬 Araştırma Başarıyla Tamamlandı!",
+      "activeBenefit": "AKTİF KAZANIM",
+      "unlockedDesc": "🏗️ Yeni Bina Açıldı: {{name}} (İnşaat Menüsünde Hazır!)",
+      "bonusDesc": "⚡ {{target}} İçin +%{{bonus}} Üretim Bonusu",
+      "autoClosing": "{{count}} saniye içinde otomatik kapanacak...",
+      "continueBtn": "Harika! Oynamaya Devam Et"
+    }
+  },
+  "build": {
+    "title": "🏗️ Bina İnşa Et",
+    "subtitle": "Şehrinize inşa etmek için bir bina seçin",
+    "cost": "Maliyet",
+    "free": "Ücretsiz",
+    "produces": "Üretim",
+    "knowledge": "Bilgi",
+    "requires": "Gereksinim",
+    "purchase": "İnşa Et"
+  },
+  "settings": {
+    "title": "⚙️ Oyun Ayarları",
+    "subtitle": "Ses seviyelerini, arayüz tercihlerini ve kayıt yönetimini özelleştirin.",
+    "audioTitle": "Ses Tercihleri",
+    "audioDesc": "Arka plan müziğini ve etkileşim ses efektlerini yönetin",
+    "soundFx": "Ses Efektleri",
+    "soundFxDesc": "Tıklama, alışveriş ve bildirim seslerini oynatır",
+    "soundVolume": "Ses Düzeyi",
+    "soundVolumeDesc": "Ses efektlerinin seviyesini ayarlayın",
+    "music": "Ortam Müziği",
+    "musicDesc": "Rahatlatıcı arka plan müziğini oynatır",
+    "musicVolume": "Müzik Düzeyi",
+    "musicVolumeDesc": "Arka plan müzik seviyesini ayarlayın",
+    "interfaceTitle": "Arayüz & Tercihler",
+    "interfaceDesc": "Görünüm, dil ve bildirim ayarları",
+    "theme": "Tema Görünümü",
+    "themeDesc": "Görsel renk modunu seçin",
+    "dark": "🌙 Koyu",
+    "light": "☀️ Açık",
+    "language": "Oyun Dili",
+    "languageDesc": "Uygulama dilini seçin",
+    "notifications": "Oyun Bildirimleri",
+    "notificationsDesc": "Ticaret ve araştırma tamamlama bildirimlerini gösterir",
+    "dangerTitle": "Oyun Verisi & Sıfırlama",
+    "dangerDesc": "Yerel kayıtlı ilerlemenizi yönetin",
+    "resetTitle": "Şehri & İlerlemeyi Sıfırla",
+    "resetDesc": "Tüm para, bina ve kaynakları varsayılan başlangıç değerlerine sıfırlar.",
+    "resetSuccess": "✓ Oyun verisi başarıyla sıfırlandı!",
+    "resetConfirmBtn": "Evet, Sıfırla!",
+    "cancelBtn": "İptal",
+    "resetBtn": "Oyunu Sıfırla"
+  },
+  "buildings": {
+    "woodcutter": {
+      "name": "Oduncu",
+      "description": "Ormanlardan ham odun toplar."
+    },
+    "stonemason": {
+      "name": "Taş Ustası",
+      "description": "Taş ocaklarından kaliteli taş yontar."
+    },
+    "carpenter": {
+      "name": "Marangoz",
+      "description": "Ham odunu işleyerek inşaatlık tahtaya dönüştürür."
+    }
+  },
+  "upgrades": {
+    "carpentry": {
+      "name": "Marangozluk",
+      "description": "İşlenmiş tahta üretmek için Marangoz binasının kilidini açar."
+    },
+    "woodcutter_efficiency_1": {
+      "name": "Keskin Baltalar (Oduncu Seviye 1)",
+      "description": "Ağaç kesim tekniklerini geliştirerek Oduncu üretimini %20 artırır (+0.2 bonus)."
+    },
+    "stonemason_efficiency_1": {
+      "name": "Sertleştirilmiş Keskiler (Taş Ustası Seviye 1)",
+      "description": "Taş yontma aletlerini iyileştirerek Taş Ustası üretimini %20 artırır (+0.2 bonus)."
+    }
+  },
+  "items": {
+    "wood": {
+      "name": "Odun",
+      "description": "Ormanlardan kesilen ham odun."
+    },
+    "stone": {
+      "name": "Taş",
+      "description": "Yapılar için ocaktan çıkarılan taş."
+    },
+    "plank": {
+      "name": "Tahta",
+      "description": "Marangozlar tarafından işlenmiş kereste."
+    }
+  }
+}

@@ -1,10 +1,12 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
 import { getUpgradeMultiplier, calculateResourceProduction } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
 
 const CityView = ({ onOpenBuild }) => {
+  const { t } = useTranslation()
   const { buildings, upgrades, money, wood, stone, plank, knowledge, experience } = useGameStore(state => ({
     buildings: state.buildings || [],
     upgrades: state.upgrades || [],
@@ -41,51 +43,51 @@ const CityView = ({ onOpenBuild }) => {
   const inventoryItems = [
     {
       id: 'money',
-      name: 'Cash / Treasury',
+      name: t('resources.money'),
       icon: '💰',
       amount: `$${formatNumber(money)}`,
       rate: null,
-      description: 'Used to purchase buildings, tools and trade goods.',
+      description: t('resources.moneyDesc'),
     },
     {
       id: 'wood',
-      name: 'Wood',
+      name: t('resources.wood'),
       icon: '🪵',
-      amount: `${formatNumber(wood)} units`,
+      amount: `${formatNumber(wood)} ${t('resources.units')}`,
       rate: productionRates.wood ? `+${Number(productionRates.wood.toFixed(2))}/s` : '0/s',
-      description: 'Raw building material harvested by woodcutters.',
+      description: t('resources.woodDesc'),
     },
     {
       id: 'plank',
-      name: 'Planks',
+      name: t('resources.plank'),
       icon: '🪚',
-      amount: `${formatNumber(plank)} units`,
+      amount: `${formatNumber(plank)} ${t('resources.units')}`,
       rate: productionRates.plank ? `+${Number(productionRates.plank.toFixed(2))}/s` : '0/s',
-      description: 'Refined lumber processed by carpenters.',
+      description: t('resources.plankDesc'),
     },
     {
       id: 'stone',
-      name: 'Stone',
+      name: t('resources.stone'),
       icon: '🪨',
-      amount: `${formatNumber(stone)} units`,
+      amount: `${formatNumber(stone)} ${t('resources.units')}`,
       rate: productionRates.stone ? `+${Number(productionRates.stone.toFixed(2))}/s` : '0/s',
-      description: 'Heavy quarry material cut by stonemasons.',
+      description: t('resources.stoneDesc'),
     },
     {
       id: 'knowledge',
-      name: 'Knowledge',
+      name: t('resources.knowledge'),
       icon: '💡',
-      amount: `${formatNumber(knowledge)} points`,
+      amount: `${formatNumber(knowledge)} ${t('resources.points')}`,
       rate: productionRates.knowledge ? `+${Number(productionRates.knowledge.toFixed(2))}/s` : '0/s',
-      description: 'Scientific insight used to unlock new technologies.',
+      description: t('resources.knowledgeDesc'),
     },
     {
       id: 'experience',
-      name: 'Experience',
+      name: t('resources.experience'),
       icon: '📚',
-      amount: `${formatNumber(experience)} XP`,
+      amount: `${formatNumber(experience)} ${t('resources.xp')}`,
       rate: null,
-      description: 'Progression gained through completing milestones.',
+      description: t('resources.experienceDesc'),
     },
   ]
 
@@ -93,14 +95,14 @@ const CityView = ({ onOpenBuild }) => {
     <div className="screen city-view">
       <div className="city-header-section">
         <div>
-          <h1>City Dashboard</h1>
+          <h1>{t('city.title')}</h1>
           <p className="city-subtitle">
-            Overview of your city's total inventory, production capacity, and active buildings.
+            {t('city.subtitle')}
           </p>
         </div>
         {onOpenBuild && (
           <Button onClick={onOpenBuild} variant="primary" className="hero-build-button">
-            🔨 Construct Building
+            {t('city.constructBtn')}
           </Button>
         )}
       </div>
@@ -108,8 +110,10 @@ const CityView = ({ onOpenBuild }) => {
       {/* Comprehensive Inventory Section */}
       <section className="dashboard-section">
         <div className="section-title-row">
-          <h2>📦 City Inventory & Storage</h2>
-          <span className="section-badge">{inventoryItems.length} Commodities</span>
+          <h2>{t('city.inventoryTitle')}</h2>
+          <span className="section-badge">
+            {t('city.commoditiesCount', { count: inventoryItems.length })}
+          </span>
         </div>
         <div className="inventory-grid">
           {inventoryItems.map(item => (
@@ -125,7 +129,7 @@ const CityView = ({ onOpenBuild }) => {
                 <p className="inventory-desc">{item.description}</p>
                 {item.rate && (
                   <div className="inventory-rate-badge">
-                    <span>Rate: </span>
+                    <span>{t('resources.rate')}: </span>
                     <strong className="text-success">{item.rate}</strong>
                   </div>
                 )}
@@ -138,14 +142,14 @@ const CityView = ({ onOpenBuild }) => {
       {/* Net Production Rates Summary */}
       <section className="dashboard-section">
         <div className="section-title-row">
-          <h2>⚡ Production Summary</h2>
-          <span className="section-badge">Per Second Yield</span>
+          <h2>{t('city.productionTitle')}</h2>
+          <span className="section-badge">{t('city.yieldBadge')}</span>
         </div>
         <div className="production-summary-grid">
           <div className="production-summary-card">
             <span className="summary-icon">🪵</span>
             <div>
-              <span className="summary-label">Wood Yield</span>
+              <span className="summary-label">{t('city.woodYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.wood || 0).toFixed(2))}/s
               </strong>
@@ -154,7 +158,7 @@ const CityView = ({ onOpenBuild }) => {
           <div className="production-summary-card">
             <span className="summary-icon">🪚</span>
             <div>
-              <span className="summary-label">Plank Yield</span>
+              <span className="summary-label">{t('city.plankYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.plank || 0).toFixed(2))}/s
               </strong>
@@ -163,7 +167,7 @@ const CityView = ({ onOpenBuild }) => {
           <div className="production-summary-card">
             <span className="summary-icon">🪨</span>
             <div>
-              <span className="summary-label">Stone Yield</span>
+              <span className="summary-label">{t('city.stoneYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.stone || 0).toFixed(2))}/s
               </strong>
@@ -172,7 +176,7 @@ const CityView = ({ onOpenBuild }) => {
           <div className="production-summary-card">
             <span className="summary-icon">💡</span>
             <div>
-              <span className="summary-label">Knowledge Generation</span>
+              <span className="summary-label">{t('city.knowledgeYield')}</span>
               <strong className="summary-value text-warning">
                 +{Number((productionRates.knowledge || 0).toFixed(2))}/s
               </strong>
@@ -184,19 +188,21 @@ const CityView = ({ onOpenBuild }) => {
       {/* City Constructed Buildings Section */}
       <section className="dashboard-section">
         <div className="section-title-row">
-          <h2>🏛️ Active Buildings in City</h2>
-          <span className="section-badge">{buildings.length} Total Structures</span>
+          <h2>{t('city.activeBuildingsTitle')}</h2>
+          <span className="section-badge">
+            {t('city.structuresCount', { count: buildings.length })}
+          </span>
         </div>
 
         <div className="owned-buildings-list">
           {groupedBuildings.length === 0 ? (
             <div className="empty-buildings-banner">
               <span className="empty-icon">🏗️</span>
-              <h3>No Buildings Constructed Yet</h3>
-              <p>Your city needs production structures to begin generating resources and knowledge.</p>
+              <h3>{t('city.emptyBuildingsTitle')}</h3>
+              <p>{t('city.emptyBuildingsDesc')}</p>
               {onOpenBuild && (
                 <Button onClick={onOpenBuild} variant="primary">
-                  Open Build Menu
+                  {t('city.openBuildMenu')}
                 </Button>
               )}
             </div>
@@ -206,16 +212,18 @@ const CityView = ({ onOpenBuild }) => {
               const totalProduction = Number((group.productionQuantityPerBuilding * multiplier * group.count).toFixed(2))
               const totalKnowledge = Number(((group.knowledgePerBuilding || 0) * group.count).toFixed(2))
               const bonusPct = Math.round((multiplier - 1) * 100)
+              const translatedBuildingName = t(`buildings.${group.id}.name`, group.name)
+              const translatedProduct = t(`resources.${group.product}`, group.product)
 
               return (
                 <div key={group.id} className="owned-building-row">
                   <div className="building-identity">
-                    <strong>{group.name}</strong>
+                    <strong>{translatedBuildingName}</strong>
                     <span className="building-count-badge">x{group.count}</span>
                   </div>
                   <div className="building-production-info">
                     <span className="production-pill text-success">
-                      +{totalProduction} {group.product}/s
+                      +{totalProduction} {translatedProduct}/s
                       {bonusPct > 0 && ` (+${bonusPct}%)`}
                     </span>
                     {totalKnowledge > 0 && (

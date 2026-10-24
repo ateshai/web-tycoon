@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
 import { UPGRADES, BUILDINGS } from '../../logic/constants'
@@ -6,6 +7,7 @@ import { meetsRequirements } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
 
 const ResearchView = () => {
+  const { t } = useTranslation()
   const { knowledge, upgrades, buildings, activeResearch, startResearch } = useGameStore(state => ({
     knowledge: state.knowledge || 0,
     upgrades: state.upgrades || [],
@@ -28,7 +30,7 @@ const ResearchView = () => {
         const found = Object.values(BUILDINGS).find(
           b => b.id.toLowerCase() === buildingKey.toLowerCase()
         )
-        const name = found ? found.name : buildingKey
+        const name = found ? t(`buildings.${found.id}.name`, found.name) : buildingKey
         return `${count} ${name}`
       })
       .join(', ')
@@ -37,13 +39,13 @@ const ResearchView = () => {
   return (
     <div className="screen research-view">
       <div className="research-header">
-        <h1>Research & Development</h1>
+        <h1>{t('research.title')}</h1>
         <div className="knowledge-pill">
-          <span>💡 Available Knowledge: <strong>{formatNumber(knowledge)}</strong></span>
+          <span>💡 {t('research.availableKnowledge')}: <strong>{formatNumber(knowledge)}</strong></span>
         </div>
       </div>
       <p className="research-subtitle">
-        Invest your Knowledge into timed technological breakthroughs to expand your city's capabilities.
+        {t('research.subtitle')}
       </p>
 
       <div className="upgrades-grid">
@@ -59,35 +61,40 @@ const ResearchView = () => {
             ? Object.values(BUILDINGS).find(b => b.id.toLowerCase() === upgrade.unlocks.toLowerCase())
             : null
 
+          const upgradeName = t(`upgrades.${upgrade.id}.name`, upgrade.name)
+          const upgradeDesc = t(`upgrades.${upgrade.id}.description`, upgrade.description)
+          const unlockedName = unlockedBuilding ? t(`buildings.${unlockedBuilding.id}.name`, unlockedBuilding.name) : ''
+          const affectsName = upgrade.affects ? t(`buildings.${upgrade.affects}.name`, upgrade.affects) : ''
+
           return (
             <div
               key={key}
               className={`upgrade-card ${isPurchased ? 'purchased' : isCurrentResearch ? 'in-progress' : !canResearch ? 'disabled' : ''}`}
             >
               <div className="upgrade-card-header">
-                <h3>{upgrade.name}</h3>
-                {isPurchased && <span className="status-badge researched">Researched</span>}
-                {isCurrentResearch && <span className="status-badge researching">Researching...</span>}
+                <h3>{upgradeName}</h3>
+                {isPurchased && <span className="status-badge researched">{t('research.statusResearched')}</span>}
+                {isCurrentResearch && <span className="status-badge researching">{t('research.statusResearching')}</span>}
               </div>
 
-              <p className="upgrade-description">{upgrade.description}</p>
+              <p className="upgrade-description">{upgradeDesc}</p>
 
               <div className="upgrade-details">
                 <p>
-                  <strong>Cost:</strong> 💡 {upgrade.cost?.knowledge || 0} Knowledge
+                  <strong>{t('research.cost')}:</strong> 💡 {upgrade.cost?.knowledge || 0} {t('resources.knowledge')}
                 </p>
                 <p>
-                  <strong>Research Time:</strong> ⏱️ {upgrade.duration || 10} seconds
+                  <strong>{t('research.researchTime')}:</strong> ⏱️ {upgrade.duration || 10} {t('research.seconds')}
                 </p>
                 <p>
-                  <strong>Effect:</strong>{' '}
+                  <strong>{t('research.effect')}:</strong>{' '}
                   {unlockedBuilding
-                    ? `Unlocks ${unlockedBuilding.name} building`
-                    : `+${Math.round((upgrade.multiplier || 0) * 100)}% production for ${upgrade.affects}`}
+                    ? t('research.unlocksBuilding', { name: unlockedName })
+                    : t('research.productionBonus', { bonus: Math.round((upgrade.multiplier || 0) * 100), target: affectsName })}
                 </p>
                 {upgrade.requirements ? (
                   <p className={`requirement-info ${hasRequirements ? 'met' : 'unmet'}`}>
-                    <strong>Requires:</strong> {hasRequirements ? '✔️ ' : '🔒 '}
+                    <strong>{t('research.requires')}:</strong> {hasRequirements ? '✔️ ' : '🔒 '}
                     {formatRequirements(upgrade.requirements)}
                   </p>
                 ) : null}
@@ -99,12 +106,12 @@ const ResearchView = () => {
                 disabled={!canResearch}
               >
                 {isPurchased
-                  ? 'Researched ✔️'
+                  ? t('research.btnResearched')
                   : isCurrentResearch
-                  ? 'In Progress ⏳'
+                  ? t('research.btnInProgress')
                   : isAnyResearchActive
-                  ? 'Queue Busy (Wait)'
-                  : `Start Research (${upgrade.duration || 10}s)`}
+                  ? t('research.btnQueueBusy')
+                  : t('research.btnStart', { duration: upgrade.duration || 10 })}
               </Button>
             </div>
           )

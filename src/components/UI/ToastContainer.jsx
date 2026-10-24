@@ -1,8 +1,10 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import { useSettingsStore } from '../../store/settingsStore'
 
 const ToastContainer = () => {
+  const { t } = useTranslation()
   const notifications = useGameStore(state => state.notifications || [])
   const removeNotification = useGameStore(state => state.removeNotification)
   const notificationsEnabled = useSettingsStore(state => state.notifications ?? true)
@@ -40,7 +42,7 @@ const ToastContainer = () => {
             <button
               className="toast-close-btn"
               onClick={() => removeNotification(toast.id)}
-              aria-label="Kapat"
+              aria-label={t('settings.cancelBtn')}
             >
               ✕
             </button>

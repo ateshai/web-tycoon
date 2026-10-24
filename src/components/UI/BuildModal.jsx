@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import Button from './Button'
 import { BUILDINGS, UPGRADES } from '../../logic/constants'
@@ -6,6 +7,7 @@ import { meetsRequirements, getUpgradeMultiplier } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
 
 const BuildModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation()
   const { buildings, upgrades, resources, purchaseBuilding } = useGameStore(state => ({
     buildings: state.buildings,
     upgrades: state.upgrades || [],
@@ -43,13 +45,13 @@ const BuildModal = ({ isOpen, onClose }) => {
   }
 
   const formatCost = (cost) => {
-    if (!cost) return 'Free'
+    if (!cost) return t('build.free')
     if (typeof cost === 'number') return `$${cost}`
     return Object.entries(cost)
       .map(([resource, amount]) => {
         if (resource === 'money') return `$${amount}`
-        const capitalized = resource.charAt(0).toUpperCase() + resource.slice(1)
-        return `${amount} ${capitalized}`
+        const resourceName = t(`resources.${resource}`, resource)
+        return `${amount} ${resourceName}`
       })
       .join(', ')
   }
@@ -62,7 +64,8 @@ const BuildModal = ({ isOpen, onClose }) => {
       const researchList = Array.isArray(requirements.research) ? requirements.research : [requirements.research]
       researchList.forEach(id => {
         const found = Object.values(UPGRADES).find(u => u.id.toLowerCase() === id.toLowerCase())
-        parts.push(`Research: ${found ? found.name : id}`)
+        const resName = found ? t(`upgrades.${found.id}.name`, found.name) : id
+        parts.push(`${t('nav.research')}: ${resName}`)
       })
     }
 
@@ -72,7 +75,7 @@ const BuildModal = ({ isOpen, onClose }) => {
       const found = Object.values(BUILDINGS).find(
         b => b.id.toLowerCase() === buildingKey.toLowerCase()
       )
-      const name = found ? found.name : buildingKey
+      const name = found ? t(`buildings.${found.id}.name`, found.name) : buildingKey
       parts.push(`${count} ${name}`)
     })
 
@@ -89,8 +92,8 @@ const BuildModal = ({ isOpen, onClose }) => {
       <div className="modal-container build-modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <h2>🏗️ Construct Building</h2>
-            <p className="modal-subtitle">Choose a building to construct in your city</p>
+            <h2>{t('build.title')}</h2>
+            <p className="modal-subtitle">{t('build.subtitle')}</p>
           </div>
           <button className="modal-close-button" onClick={onClose} aria-label="Close modal">
             ✕
@@ -99,10 +102,10 @@ const BuildModal = ({ isOpen, onClose }) => {
 
         <div className="modal-quick-resources">
           <span>💰 ${formatNumber(resources.money || 0)}</span>
-          <span>🪵 {formatNumber(resources.wood || 0)} Wood</span>
-          <span>🪚 {formatNumber(resources.plank || 0)} Plank</span>
-          <span>🪨 {formatNumber(resources.stone || 0)} Stone</span>
-          <span>💡 {formatNumber(resources.knowledge || 0)} Knowledge</span>
+          <span>🪵 {formatNumber(resources.wood || 0)} {t('resources.wood')}</span>
+          <span>🪚 {formatNumber(resources.plank || 0)} {t('resources.plank')}</span>
+          <span>🪨 {formatNumber(resources.stone || 0)} {t('resources.stone')}</span>
+          <span>💡 {formatNumber(resources.knowledge || 0)} {t('resources.knowledge')}</span>
         </div>
 
         <div className="modal-content">
@@ -114,23 +117,25 @@ const BuildModal = ({ isOpen, onClose }) => {
               const multiplier = getUpgradeMultiplier(building.id || type, upgrades)
               const effectiveProduction = Number(((building.productionQuantity || 0) * multiplier).toFixed(2))
               const bonusPct = Math.round((multiplier - 1) * 100)
+              const buildingName = t(`buildings.${building.id || type}.name`, building.name)
+              const productName = t(`resources.${building.product}`, building.product)
 
               return (
                 <div key={type} className={`building-card ${!canPurchase ? 'disabled' : ''}`}>
                   <div className="building-card-header">
-                    <h3>{building.name}</h3>
+                    <h3>{buildingName}</h3>
                   </div>
-                  <p><strong>Cost:</strong> {formatCost(building.cost)}</p>
+                  <p><strong>{t('build.cost')}:</strong> {formatCost(building.cost)}</p>
                   <p>
-                    <strong>Produces:</strong> +{effectiveProduction} {building.product}/s
+                    <strong>{t('build.produces')}:</strong> +{effectiveProduction} {productName}/s
                     {bonusPct > 0 && <span className="multiplier-badge"> (+{bonusPct}%)</span>}
                   </p>
                   {building.knowledge ? (
-                    <p><strong>Knowledge:</strong> +{building.knowledge}/s</p>
+                    <p><strong>{t('build.knowledge')}:</strong> +{building.knowledge}/s</p>
                   ) : null}
                   {building.requirements ? (
                     <p className={`requirement-info ${hasRequirements ? 'met' : 'unmet'}`}>
-                      <strong>Requires:</strong> {hasRequirements ? '✔️ ' : '🔒 '}
+                      <strong>{t('build.requires')}:</strong> {hasRequirements ? '✔️ ' : '🔒 '}
                       {formatRequirements(building.requirements)}
                     </p>
                   ) : null}
@@ -138,7 +143,7 @@ const BuildModal = ({ isOpen, onClose }) => {
                     onClick={() => handlePurchase(type)}
                     disabled={!canPurchase}
                   >
-                    Purchase
+                    {t('build.purchase')}
                   </Button>
                 </div>
               )

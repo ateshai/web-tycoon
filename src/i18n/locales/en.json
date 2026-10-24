@@ -1,0 +1,187 @@
+{
+  "app": {
+    "title": "HTML Tycoon",
+    "researching": "Researching",
+    "left": "left"
+  },
+  "nav": {
+    "city": "City",
+    "market": "Market",
+    "build": "Build",
+    "research": "Research",
+    "settings": "Settings"
+  },
+  "resources": {
+    "money": "Cash / Treasury",
+    "moneyDesc": "Used to purchase buildings, tools, and trade goods.",
+    "wood": "Wood",
+    "woodDesc": "Raw building material harvested by woodcutters.",
+    "plank": "Planks",
+    "plankDesc": "Refined lumber processed by carpenters.",
+    "stone": "Stone",
+    "stoneDesc": "Heavy quarry material cut by stonemasons.",
+    "knowledge": "Knowledge",
+    "knowledgeDesc": "Scientific insight used to unlock new technologies.",
+    "experience": "Experience",
+    "experienceDesc": "Progression gained through completing milestones.",
+    "units": "units",
+    "points": "points",
+    "xp": "XP",
+    "rate": "Rate"
+  },
+  "city": {
+    "title": "City Dashboard",
+    "subtitle": "Overview of your city's total inventory, production capacity, and active buildings.",
+    "constructBtn": "🔨 Construct Building",
+    "inventoryTitle": "📦 City Inventory & Storage",
+    "commoditiesCount": "{{count}} Commodities",
+    "productionTitle": "⚡ Production Summary",
+    "yieldBadge": "Per Second Yield",
+    "woodYield": "Wood Yield",
+    "plankYield": "Plank Yield",
+    "stoneYield": "Stone Yield",
+    "knowledgeYield": "Knowledge Generation",
+    "activeBuildingsTitle": "🏛️ Active Buildings in City",
+    "structuresCount": "{{count}} Total Structures",
+    "emptyBuildingsTitle": "No Buildings Constructed Yet",
+    "emptyBuildingsDesc": "Your city needs production structures to begin generating resources and knowledge.",
+    "openBuildMenu": "Open Build Menu"
+  },
+  "market": {
+    "title": "City Market",
+    "subtitle": "Trade your manufactured goods for money or purchase raw construction supplies.",
+    "cash": "Cash",
+    "sellTab": "Sell Goods 💰",
+    "buyTab": "Buy Supplies 🛒",
+    "sellSectionTitle": "Sell Your Manufactured Products",
+    "buySectionTitle": "Buy Construction Supplies",
+    "sellPrice": "Sell Price",
+    "buyPrice": "Buy Price",
+    "inStorage": "In Storage",
+    "totalValue": "Total Inventory Value",
+    "currentStock": "Current Stock",
+    "sell1": "Sell 1 (+${{price}})",
+    "sell10": "Sell 10 (+${{price}})",
+    "sell50": "Sell 50 (+${{price}})",
+    "sellAll": "Sell All (+${{value}})",
+    "buy1": "Buy 1 (-${{price}})",
+    "buy10": "Buy 10 (-${{price}})",
+    "buy50": "Buy 50 (-${{price}})",
+    "toast": {
+      "saleSuccessTitle": "Sale Completed!",
+      "saleSuccessMsg": "Sold {{count}}x {{name}}",
+      "buySuccessTitle": "Purchase Successful!",
+      "buySuccessMsg": "Bought {{count}}x {{name}}"
+    }
+  },
+  "research": {
+    "title": "Research & Development",
+    "subtitle": "Invest your Knowledge into timed technological breakthroughs to expand your city's capabilities.",
+    "availableKnowledge": "Available Knowledge",
+    "cost": "Cost",
+    "researchTime": "Research Time",
+    "seconds": "seconds",
+    "effect": "Effect",
+    "requires": "Requires",
+    "unlocksBuilding": "Unlocks {{name}} building",
+    "productionBonus": "+{{bonus}}% production for {{target}}",
+    "statusResearched": "Researched",
+    "statusResearching": "Researching...",
+    "btnResearched": "Researched ✔️",
+    "btnInProgress": "In Progress ⏳",
+    "btnQueueBusy": "Queue Busy (Wait)",
+    "btnStart": "Start Research ({{duration}}s)",
+    "modal": {
+      "title": "🔬 Research Breakthrough!",
+      "activeBenefit": "ACTIVE BENEFIT",
+      "unlockedDesc": "🏗️ Unlocked New Building: {{name}} (Ready in Build Menu!)",
+      "bonusDesc": "⚡ +{{bonus}}% Production Bonus for {{target}}",
+      "autoClosing": "Auto-closing in {{count}}s...",
+      "continueBtn": "Awesome! Continue Playing"
+    }
+  },
+  "build": {
+    "title": "🏗️ Construct Building",
+    "subtitle": "Choose a building to construct in your city",
+    "cost": "Cost",
+    "free": "Free",
+    "produces": "Produces",
+    "knowledge": "Knowledge",
+    "requires": "Requires",
+    "purchase": "Purchase"
+  },
+  "settings": {
+    "title": "⚙️ Game Settings",
+    "subtitle": "Customize your audio levels, visual preferences, and game management options.",
+    "audioTitle": "Audio Preferences",
+    "audioDesc": "Control background music and interactive sound effects",
+    "soundFx": "Sound Effects",
+    "soundFxDesc": "Play clicks, purchase sounds, and notifications",
+    "soundVolume": "Sound Volume",
+    "soundVolumeDesc": "Adjust sound effects volume",
+    "music": "Ambient Music",
+    "musicDesc": "Play relaxing background soundtrack",
+    "musicVolume": "Music Volume",
+    "musicVolumeDesc": "Adjust music playback volume",
+    "interfaceTitle": "Interface & Preferences",
+    "interfaceDesc": "Appearance, language, and notification alerts",
+    "theme": "Theme Appearance",
+    "themeDesc": "Select visual color mode",
+    "dark": "🌙 Dark",
+    "light": "☀️ Light",
+    "language": "Game Language",
+    "languageDesc": "Select application language",
+    "notifications": "Game Notifications",
+    "notificationsDesc": "Show trade toasts and research milestone alerts",
+    "dangerTitle": "Game Data & Storage",
+    "dangerDesc": "Manage your local save data and progress",
+    "resetTitle": "Reset City & Progress",
+    "resetDesc": "Reset money, buildings, and resources back to default initial values.",
+    "resetSuccess": "✓ Game data reset successfully!",
+    "resetConfirmBtn": "Yes, Reset!",
+    "cancelBtn": "Cancel",
+    "resetBtn": "Reset Game"
+  },
+  "buildings": {
+    "woodcutter": {
+      "name": "Woodcutter",
+      "description": "Harvests raw timber from surrounding forests."
+    },
+    "stonemason": {
+      "name": "Stonemason",
+      "description": "Quarries stone from rock formations."
+    },
+    "carpenter": {
+      "name": "Carpenter",
+      "description": "Refines raw timber into processed construction planks."
+    }
+  },
+  "upgrades": {
+    "carpentry": {
+      "name": "Carpentry",
+      "description": "Unlocks the Carpenter building to craft refined wood planks."
+    },
+    "woodcutter_efficiency_1": {
+      "name": "Sharper Axes (Woodcutter Lvl 1)",
+      "description": "Improves wood chopping techniques, increasing Woodcutter production by 20% (+0.2 bonus)."
+    },
+    "stonemason_efficiency_1": {
+      "name": "Hardened Chisels (Stonemason Lvl 1)",
+      "description": "Improves stone crafting tools, increasing Stonemason production by 20% (+0.2 bonus)."
+    }
+  },
+  "items": {
+    "wood": {
+      "name": "Wood",
+      "description": "Raw wood chopped from forests."
+    },
+    "stone": {
+      "name": "Stone",
+      "description": "Quarried stones suitable for masonry."
+    },
+    "plank": {
+      "name": "Plank",
+      "description": "Refined wood processed by carpenters."
+    }
+  }
+}

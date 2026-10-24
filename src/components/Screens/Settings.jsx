@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSettingsStore } from '../../store/settingsStore'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
 
 const Settings = () => {
+  const { t } = useTranslation()
   const {
     soundEnabled,
     musicEnabled,
@@ -11,11 +13,13 @@ const Settings = () => {
     musicVolume,
     theme,
     notifications,
+    language,
     toggleSound,
     toggleMusic,
     updateSoundSettings,
     setTheme,
     toggleNotifications,
+    setLanguage,
   } = useSettingsStore()
 
   const initializeGame = useGameStore(state => state.initialize)
@@ -36,9 +40,9 @@ const Settings = () => {
   return (
     <div className="screen settings-view">
       <div className="settings-header">
-        <h1>⚙️ Game Settings</h1>
+        <h1>{t('settings.title')}</h1>
         <p className="settings-subtitle">
-          Customize your audio levels, visual preferences, and game management options.
+          {t('settings.subtitle')}
         </p>
       </div>
 
@@ -48,8 +52,8 @@ const Settings = () => {
           <div className="settings-card-header">
             <span className="card-header-icon">🔊</span>
             <div>
-              <h2>Audio Preferences</h2>
-              <p>Control background music and interactive sound effects</p>
+              <h2>{t('settings.audioTitle')}</h2>
+              <p>{t('settings.audioDesc')}</p>
             </div>
           </div>
 
@@ -57,14 +61,14 @@ const Settings = () => {
             {/* Sound FX Toggle */}
             <div className="setting-row">
               <div className="setting-info">
-                <span className="setting-name">Sound Effects</span>
-                <span className="setting-desc">Play clicks, purchase sounds, and notifications</span>
+                <span className="setting-name">{t('settings.soundFx')}</span>
+                <span className="setting-desc">{t('settings.soundFxDesc')}</span>
               </div>
               <button
                 type="button"
                 className={`modern-toggle ${soundEnabled ? 'active' : ''}`}
                 onClick={toggleSound}
-                aria-label="Toggle Sound Effects"
+                aria-label={t('settings.soundFx')}
               >
                 <span className="toggle-thumb" />
               </button>
@@ -73,8 +77,8 @@ const Settings = () => {
             {/* Sound FX Volume */}
             <div className={`setting-row slider-row ${!soundEnabled ? 'disabled' : ''}`}>
               <div className="setting-info">
-                <span className="setting-name">Sound Volume</span>
-                <span className="setting-desc">Adjust sound effects volume</span>
+                <span className="setting-name">{t('settings.soundVolume')}</span>
+                <span className="setting-desc">{t('settings.soundVolumeDesc')}</span>
               </div>
               <div className="slider-control">
                 <input
@@ -94,14 +98,14 @@ const Settings = () => {
             {/* Music Toggle */}
             <div className="setting-row">
               <div className="setting-info">
-                <span className="setting-name">Ambient Music</span>
-                <span className="setting-desc">Play relaxing background soundtrack</span>
+                <span className="setting-name">{t('settings.music')}</span>
+                <span className="setting-desc">{t('settings.musicDesc')}</span>
               </div>
               <button
                 type="button"
                 className={`modern-toggle ${musicEnabled ? 'active' : ''}`}
                 onClick={toggleMusic}
-                aria-label="Toggle Ambient Music"
+                aria-label={t('settings.music')}
               >
                 <span className="toggle-thumb" />
               </button>
@@ -110,8 +114,8 @@ const Settings = () => {
             {/* Music Volume */}
             <div className={`setting-row slider-row ${!musicEnabled ? 'disabled' : ''}`}>
               <div className="setting-info">
-                <span className="setting-name">Music Volume</span>
-                <span className="setting-desc">Adjust music playback volume</span>
+                <span className="setting-name">{t('settings.musicVolume')}</span>
+                <span className="setting-desc">{t('settings.musicVolumeDesc')}</span>
               </div>
               <div className="slider-control">
                 <input
@@ -135,17 +139,41 @@ const Settings = () => {
           <div className="settings-card-header">
             <span className="card-header-icon">🖥️</span>
             <div>
-              <h2>Interface & Notifications</h2>
-              <p>Appearance and notification alerts</p>
+              <h2>{t('settings.interfaceTitle')}</h2>
+              <p>{t('settings.interfaceDesc')}</p>
             </div>
           </div>
 
           <div className="settings-card-body">
+            {/* Language Selector */}
+            <div className="setting-row">
+              <div className="setting-info">
+                <span className="setting-name">{t('settings.language')}</span>
+                <span className="setting-desc">{t('settings.languageDesc')}</span>
+              </div>
+              <div className="theme-selector-group">
+                <button
+                  type="button"
+                  className={`theme-chip ${language === 'tr' ? 'active' : ''}`}
+                  onClick={() => setLanguage('tr')}
+                >
+                  🇹🇷 Türkçe
+                </button>
+                <button
+                  type="button"
+                  className={`theme-chip ${language === 'en' ? 'active' : ''}`}
+                  onClick={() => setLanguage('en')}
+                >
+                  🇬🇧 English
+                </button>
+              </div>
+            </div>
+
             {/* Theme Selector */}
             <div className="setting-row">
               <div className="setting-info">
-                <span className="setting-name">Theme Appearance</span>
-                <span className="setting-desc">Select visual color mode</span>
+                <span className="setting-name">{t('settings.theme')}</span>
+                <span className="setting-desc">{t('settings.themeDesc')}</span>
               </div>
               <div className="theme-selector-group">
                 <button
@@ -153,14 +181,14 @@ const Settings = () => {
                   className={`theme-chip ${theme === 'dark' ? 'active' : ''}`}
                   onClick={() => setTheme('dark')}
                 >
-                  🌙 Dark
+                  {t('settings.dark')}
                 </button>
                 <button
                   type="button"
                   className={`theme-chip ${theme === 'light' ? 'active' : ''}`}
                   onClick={() => setTheme('light')}
                 >
-                  ☀️ Light
+                  {t('settings.light')}
                 </button>
               </div>
             </div>
@@ -168,14 +196,14 @@ const Settings = () => {
             {/* Notifications Toggle */}
             <div className="setting-row">
               <div className="setting-info">
-                <span className="setting-name">Game Notifications</span>
-                <span className="setting-desc">Show research and milestone toasts</span>
+                <span className="setting-name">{t('settings.notifications')}</span>
+                <span className="setting-desc">{t('settings.notificationsDesc')}</span>
               </div>
               <button
                 type="button"
                 className={`modern-toggle ${notifications ? 'active' : ''}`}
                 onClick={toggleNotifications}
-                aria-label="Toggle Notifications"
+                aria-label={t('settings.notifications')}
               >
                 <span className="toggle-thumb" />
               </button>
@@ -188,20 +216,20 @@ const Settings = () => {
           <div className="settings-card-header">
             <span className="card-header-icon">⚠️</span>
             <div>
-              <h2>Game Data & Storage</h2>
-              <p>Manage your local save data and progress</p>
+              <h2>{t('settings.dangerTitle')}</h2>
+              <p>{t('settings.dangerDesc')}</p>
             </div>
           </div>
 
           <div className="settings-card-body">
             <div className="setting-row danger-row">
               <div className="setting-info">
-                <span className="setting-name">Reset City & Progress</span>
+                <span className="setting-name">{t('settings.resetTitle')}</span>
                 <span className="setting-desc">
-                  Reset money, buildings, and resources back to default initial values.
+                  {t('settings.resetDesc')}
                 </span>
                 {resetSuccess && (
-                  <span className="reset-success-msg">✓ Game data reset successfully!</span>
+                  <span className="reset-success-msg">{t('settings.resetSuccess')}</span>
                 )}
               </div>
               <div className="danger-actions">
@@ -212,14 +240,14 @@ const Settings = () => {
                       className="confirm-reset-btn"
                       onClick={handleResetGame}
                     >
-                      Yes, Reset!
+                      {t('settings.resetConfirmBtn')}
                     </button>
                     <button
                       type="button"
                       className="cancel-reset-btn"
                       onClick={() => setResetConfirm(false)}
                     >
-                      Cancel
+                      {t('settings.cancelBtn')}
                     </button>
                   </div>
                 ) : (
@@ -228,7 +256,7 @@ const Settings = () => {
                     className="danger-button"
                     onClick={() => setResetConfirm(true)}
                   >
-                    Reset Game
+                    {t('settings.resetBtn')}
                   </button>
                 )}
               </div>
