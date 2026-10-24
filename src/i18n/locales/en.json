@@ -105,10 +105,12 @@
     "subtitle": "Choose a building to construct in your city",
     "cost": "Cost",
     "free": "Free",
+    "consumes": "Consumes",
     "produces": "Produces",
     "knowledge": "Knowledge",
     "requires": "Requires",
-    "purchase": "Purchase"
+    "purchase": "Purchase",
+    "materialsMissing": "Missing Materials"
   },
   "settings": {
     "title": "⚙️ Game Settings",
@@ -153,7 +155,7 @@
     },
     "carpenter": {
       "name": "Carpenter",
-      "description": "Refines raw timber into processed construction planks."
+      "description": "Consumes raw timber to craft processed construction planks."
     }
   },
   "upgrades": {

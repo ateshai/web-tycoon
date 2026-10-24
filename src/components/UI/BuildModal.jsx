@@ -126,6 +126,18 @@ const BuildModal = ({ isOpen, onClose }) => {
                     <h3>{buildingName}</h3>
                   </div>
                   <p><strong>{t('build.cost')}:</strong> {formatCost(building.cost)}</p>
+                  {building.consumes && Object.keys(building.consumes).length > 0 && (
+                    <p className="building-consumes-info">
+                      <strong>{t('build.consumes')}:</strong>{' '}
+                      <span className="text-warning">
+                        {Object.entries(building.consumes).map(([res, amt]) => {
+                          const totalReq = Number((amt * (building.productionQuantity || 1) * multiplier).toFixed(2))
+                          const resName = t(`resources.${res}`, res)
+                          return `-${totalReq} ${resName}/s`
+                        }).join(', ')}
+                      </span>
+                    </p>
+                  )}
                   <p>
                     <strong>{t('build.produces')}:</strong> +{effectiveProduction} {productName}/s
                     {bonusPct > 0 && <span className="multiplier-badge"> (+{bonusPct}%)</span>}

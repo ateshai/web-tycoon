@@ -1,22 +1,50 @@
 import { BUILDINGS, RESOURCE_RATES, THRESHOLDS } from './constants'
 
-// Calculate resource production based on owned buildings and upgrades
+// Calculate resource production based on owned buildings and upgrades (Net rates)
 export const calculateResourceProduction = (buildings, upgrades = []) => {
-  return buildings.reduce((acc, building) => {
-    const buildingDef = BUILDINGS[building.type] || building
+  const rates = calculateDetailedRates(buildings, upgrades)
+  return rates.net
+}
+
+// Calculate detailed production, consumption, and net rates
+export const calculateDetailedRates = (buildings = [], upgrades = []) => {
+  const production = {}
+  const consumption = {}
+  const net = {}
+  let totalKnowledge = 0
+
+  buildings.forEach(building => {
+    const buildingDef = (building.type && BUILDINGS[building.type]) ||
+      (building.id && BUILDINGS[building.id.toUpperCase()]) ||
+      BUILDINGS[building.type?.toUpperCase()] ||
+      building
+
     const product = buildingDef.product
     const quantity = buildingDef.productionQuantity || 0
+    const consumes = buildingDef.consumes || building.consumes
     const multiplier = getUpgradeMultiplier(building.type || building.id, upgrades)
-    
-    const nextAcc = { ...acc }
+
     if (product) {
-      nextAcc[product] = (nextAcc[product] || 0) + quantity * multiplier
+      const prodAmount = quantity * multiplier
+      production[product] = (production[product] || 0) + prodAmount
+      net[product] = (net[product] || 0) + prodAmount
     }
+
+    if (consumes) {
+      Object.entries(consumes).forEach(([res, amount]) => {
+        const consAmount = amount * (buildingDef.productionQuantity || 1) * multiplier
+        consumption[res] = (consumption[res] || 0) + consAmount
+        net[res] = (net[res] || 0) - consAmount
+      })
+    }
+
     if (buildingDef.knowledge) {
-      nextAcc.knowledge = (nextAcc.knowledge || 0) + buildingDef.knowledge
+      totalKnowledge += buildingDef.knowledge
     }
-    return nextAcc
-  }, { knowledge: 0 })
+  })
+
+  net.knowledge = totalKnowledge
+  return { production, consumption, net, knowledge: totalKnowledge }
 }
 
 // Get the multiplier for a building type based on upgrades

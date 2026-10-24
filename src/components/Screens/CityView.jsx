@@ -4,6 +4,7 @@ import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
 import { getUpgradeMultiplier, calculateResourceProduction } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
+import { BUILDINGS } from '../../logic/constants'
 
 const CityView = ({ onOpenBuild }) => {
   const { t } = useTranslation()
@@ -18,6 +19,8 @@ const CityView = ({ onOpenBuild }) => {
     experience: state.experience || 0
   }))
 
+  const playerResources = { money, wood, stone, plank, knowledge, experience }
+
   // Calculate net production rates per second
   const productionRates = calculateResourceProduction(buildings, upgrades)
 
@@ -25,14 +28,20 @@ const CityView = ({ onOpenBuild }) => {
   const groupedBuildings = Object.values(
     buildings.reduce((acc, building) => {
       const key = building.id || building.type || building.name
+      const buildingDef = (building.type && BUILDINGS[building.type]) ||
+        (building.id && BUILDINGS[building.id.toUpperCase()]) ||
+        BUILDINGS[building.type?.toUpperCase()] ||
+        building
+
       if (!acc[key]) {
         acc[key] = {
           id: key,
           name: building.name,
           count: 0,
-          product: building.product,
-          productionQuantityPerBuilding: building.productionQuantity || 0,
-          knowledgePerBuilding: building.knowledge || 0,
+          product: buildingDef.product,
+          productionQuantityPerBuilding: buildingDef.productionQuantity || 0,
+          knowledgePerBuilding: buildingDef.knowledge || 0,
+          consumes: buildingDef.consumes || building.consumes || null,
         }
       }
       acc[key].count += 1
@@ -215,13 +224,32 @@ const CityView = ({ onOpenBuild }) => {
               const translatedBuildingName = t(`buildings.${group.id}.name`, group.name)
               const translatedProduct = t(`resources.${group.product}`, group.product)
 
+              // Check if building is missing any required consumable resources
+              const isStarved = group.consumes && Object.entries(group.consumes).some(
+                ([resKey]) => (playerResources[resKey] || 0) < 1
+              )
+
               return (
-                <div key={group.id} className="owned-building-row">
+                <div key={group.id} className={`owned-building-row ${isStarved ? 'starved' : ''}`}>
                   <div className="building-identity">
                     <strong>{translatedBuildingName}</strong>
                     <span className="building-count-badge">x{group.count}</span>
+                    {isStarved && (
+                      <span className="status-badge warning" style={{ marginLeft: '8px', fontSize: '0.72rem' }}>
+                        ⚠️ {t('build.materialsMissing')}
+                      </span>
+                    )}
                   </div>
                   <div className="building-production-info">
+                    {group.consumes && Object.entries(group.consumes).map(([resKey, req]) => {
+                      const totalCons = Number((req * (group.productionQuantityPerBuilding || 1) * multiplier * group.count).toFixed(2))
+                      const resName = t(`resources.${resKey}`, resKey)
+                      return (
+                        <span key={resKey} className="production-pill text-warning" title={t('build.consumes')}>
+                          -{totalCons} {resName}/s
+                        </span>
+                      )
+                    })}
                     <span className="production-pill text-success">
                       +{totalProduction} {translatedProduct}/s
                       {bonusPct > 0 && ` (+${bonusPct}%)`}

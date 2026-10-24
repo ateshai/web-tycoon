@@ -46,22 +46,87 @@ export const useGameStore = create(
         const deltaTime = (now - state.lastUpdate) * state.gameSpeed
         const timeMultiplier = deltaTime / 1000
 
-        // Calculate production and knowledge from all buildings
-        const productionIncrements = {}
+        // Track resource mutations during this tick
+        const updatedResources = {
+          wood: state.wood || 0,
+          stone: state.stone || 0,
+          plank: state.plank || 0,
+          knowledge: state.knowledge || 0,
+          money: state.money || 0,
+          experience: state.experience || 0,
+        }
+
         let totalKnowledgeGain = 0
         const currentUpgrades = state.upgrades || []
 
+        // Phase 1: Primary production (buildings without input consumption)
         state.buildings.forEach(building => {
+          const buildingDef = (building.type && BUILDINGS[building.type]) ||
+            (building.id && BUILDINGS[building.id.toUpperCase()]) ||
+            BUILDINGS[building.type?.toUpperCase()] ||
+            building
+
+          const consumes = buildingDef.consumes || building.consumes
           const buildingId = building.id || building.type
           const multiplier = getUpgradeMultiplier(buildingId, currentUpgrades)
 
-          if (building.product && building.productionQuantity) {
-            const amount = building.productionQuantity * multiplier * timeMultiplier
-            productionIncrements[building.product] =
-              (productionIncrements[building.product] || 0) + amount
+          if (!consumes || Object.keys(consumes).length === 0) {
+            if (buildingDef.product && buildingDef.productionQuantity) {
+              const amount = buildingDef.productionQuantity * multiplier * timeMultiplier
+              updatedResources[buildingDef.product] = (updatedResources[buildingDef.product] || 0) + amount
+            }
+            if (buildingDef.knowledge) {
+              totalKnowledgeGain += buildingDef.knowledge * timeMultiplier
+            }
           }
-          if (building.knowledge) {
-            totalKnowledgeGain += building.knowledge * timeMultiplier
+        })
+
+        // Phase 2: Processing production (buildings with input consumption)
+        state.buildings.forEach(building => {
+          const buildingDef = (building.type && BUILDINGS[building.type]) ||
+            (building.id && BUILDINGS[building.id.toUpperCase()]) ||
+            BUILDINGS[building.type?.toUpperCase()] ||
+            building
+
+          const consumes = buildingDef.consumes || building.consumes
+          if (consumes && Object.keys(consumes).length > 0) {
+            const buildingId = building.id || building.type
+            const multiplier = getUpgradeMultiplier(buildingId, currentUpgrades)
+            const targetCycles = (buildingDef.productionQuantity || 1) * multiplier * timeMultiplier
+
+            // Determine max operational ratio based on available inputs
+            let maxRatio = 1
+            Object.entries(consumes).forEach(([resKey, reqPerUnit]) => {
+              const totalNeeded = reqPerUnit * targetCycles
+              const available = Math.max(0, updatedResources[resKey] || 0)
+              if (totalNeeded > 0) {
+                const ratio = available / totalNeeded
+                if (ratio < maxRatio) {
+                  maxRatio = Math.max(0, ratio)
+                }
+              }
+            })
+
+            // Actual production cycles limited by input supply
+            const actualCycles = targetCycles * maxRatio
+
+            if (actualCycles > 0) {
+              // Consume inputs
+              Object.entries(consumes).forEach(([resKey, reqPerUnit]) => {
+                const amountToConsume = reqPerUnit * actualCycles
+                updatedResources[resKey] = Math.max(0, (updatedResources[resKey] || 0) - amountToConsume)
+              })
+
+              // Produce output
+              if (buildingDef.product) {
+                updatedResources[buildingDef.product] = (updatedResources[buildingDef.product] || 0) + actualCycles
+              }
+
+              // Knowledge generated proportional to actual work done
+              if (buildingDef.knowledge) {
+                totalKnowledgeGain += buildingDef.knowledge * maxRatio * timeMultiplier
+              }
+            }
           }
         })
 
@@ -80,13 +145,10 @@ export const useGameStore = create(
         set(prevState => {
           const nextState = {
             ...prevState,
-            knowledge: (prevState.knowledge || 0) + totalKnowledgeGain,
+            ...updatedResources,
+            knowledge: (updatedResources.knowledge || 0) + totalKnowledgeGain,
             lastUpdate: now
           }
-
-          Object.entries(productionIncrements).forEach(([product, amount]) => {
-            nextState[product] = (prevState[product] || 0) + amount
-          })
 
           if (newlyCompletedResearch) {
             nextState.upgrades = newlyAddedUpgrades

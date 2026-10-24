@@ -750,6 +750,21 @@ body {
   background-color: var(--surface-color);
   border-radius: var(--border-radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.owned-building-row.starved {
+  border-color: rgba(255, 152, 0, 0.35);
+  background-color: rgba(255, 152, 0, 0.04);
+}
+
+.status-badge.warning {
+  background: rgba(255, 152, 0, 0.15);
+  color: #ff9800;
+  border: 1px solid rgba(255, 152, 0, 0.35);
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-weight: 600;
 }
 
 .building-identity {

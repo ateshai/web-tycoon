@@ -33,6 +33,9 @@ export const BUILDINGS = {
     requirements: {
       research: 'carpentry',
     },
+    consumes: {
+      wood: 1, // Consumes 1 wood to produce 1 plank
+    },
     product: 'plank',
     productionQuantity: 1,
     knowledge: 0.2,
