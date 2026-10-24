@@ -24,10 +24,39 @@
     "knowledgeDesc": "Scientific insight used to unlock new technologies.",
     "experience": "Experience",
     "experienceDesc": "Progression gained through completing milestones.",
+    "land": "Land",
+    "landDesc": "Total city territory available for construction.",
+    "freeLand": "Free Land",
+    "usedLand": "Occupied Land",
+    "population": "Population",
+    "populationDesc": "Total citizens and workforce inhabiting your city.",
+    "workingPopulation": "Working Population",
+    "freePopulation": "Idle Population",
+    "free": "Idle",
+    "working": "Working",
+    "worker": "Worker",
+    "workerRequired": "Workforce Required",
+    "populationProvided": "Population Provided",
+    "noWorkersWarning": "Insufficient Population! Build a House for more workers.",
     "units": "units",
     "points": "points",
     "xp": "XP",
     "rate": "Rate"
+  },
+  "land": {
+    "title": "🏞️ City Territory Expansion",
+    "subtitle": "Purchase additional territory plots to build more structures in your city.",
+    "status": "Territory Plots Status",
+    "used": "Occupied",
+    "free": "Available",
+    "total": "Total",
+    "currentPrice": "Unit Price",
+    "priceTierNotice": "Every 25 land units owned increases unit price by 50%.",
+    "buyOption": "+{{amount}} Land (${{cost}})",
+    "toastSuccessTitle": "Territory Expanded!",
+    "toastSuccessMsg": "Acquired {{count}} units of new city territory",
+    "noLandWarning": "🔒 Not Enough Land! Expand your territory above first.",
+    "requiresLand": "Required Land: 1 Plot"
   },
   "city": {
     "title": "City Dashboard",
@@ -145,6 +174,10 @@
     "resetBtn": "Reset Game"
   },
   "buildings": {
+    "house": {
+      "name": "House",
+      "description": "Provides residential space for citizens. Grants +5 population to your city."
+    },
     "woodcutter": {
       "name": "Woodcutter",
       "description": "Harvests raw timber from surrounding forests."

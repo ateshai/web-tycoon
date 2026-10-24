@@ -1,0 +1,111 @@
+.completionBackdrop {
+  z-index: 3000;
+}
+
+.completionModal {
+  max-width: 480px;
+  border-color: rgba(255, 193, 7, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 193, 7, 0.2);
+}
+
+.completionConfettiHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.celebrationBadge {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #ffc107;
+  letter-spacing: 0.5px;
+}
+
+.completionModalBody {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--spacing-sm);
+}
+
+.completionIconRing {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.25), rgba(76, 175, 80, 0.25));
+  border: 2px solid rgba(255, 193, 7, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-xs);
+  animation: bounceGlow 1s ease infinite alternate;
+}
+
+@keyframes bounceGlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.breakthroughIcon {
+  font-size: 2rem;
+}
+
+.completionDescription {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+  line-height: 1.4;
+}
+
+.completionBenefitBox {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: var(--spacing-xs) 0;
+}
+
+.benefitLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.8px;
+}
+
+.benefitValue {
+  font-size: 0.95rem;
+}
+
+.countdownAutoBar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: var(--spacing-xs);
+}
+
+.countdownProgressFill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 1s linear;
+}
+
+.countdownText {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.claimResearchBtn {
+  width: 100%;
+  font-weight: 700;
+  padding: 10px;
+}

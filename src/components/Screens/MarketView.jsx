@@ -5,6 +5,8 @@ import Button from '../UI/Button'
 import { MARKET_ITEMS } from '../../logic/constants'
 import { formatNumber } from '../../logic/utils'
 
+import styles from './MarketView.module.css'
+
 const MarketView = () => {
   const { t } = useTranslation()
   const [selectedTab, setSelectedTab] = useState('sell')
@@ -67,20 +69,20 @@ const MarketView = () => {
   }
 
   return (
-    <div className="screen market-view">
-      <div className="market-header">
+    <div className={`screen ${styles.marketView}`}>
+      <div className={styles.marketHeader}>
         <div>
           <h1>{t('market.title')}</h1>
-          <p className="market-subtitle">
+          <p className={styles.marketSubtitle}>
             {t('market.subtitle')}
           </p>
         </div>
-        <div className={`market-balance-pill ${balancePulse ? `pulse-${balancePulse}` : ''}`}>
+        <div className={`${styles.marketBalancePill} ${balancePulse === 'gain' ? styles.pulseGain : balancePulse === 'spend' ? styles.pulseSpend : ''}`}>
           <span>💰 {t('market.cash')}: <strong>${formatNumber(money)}</strong></span>
         </div>
       </div>
 
-      <div className="market-tabs">
+      <div className={styles.marketTabs}>
         <Button
           variant={selectedTab === 'sell' ? 'primary' : 'secondary'}
           onClick={() => setSelectedTab('sell')}
@@ -95,11 +97,11 @@ const MarketView = () => {
         </Button>
       </div>
 
-      <div className="market-content">
+      <div className={styles.marketContent}>
         {selectedTab === 'sell' ? (
-          <div className="trade-section">
+          <div className={styles.tradeSection}>
             <h2>{t('market.sellSectionTitle')}</h2>
-            <div className="market-grid">
+            <div className={styles.marketGrid}>
               {Object.values(MARKET_ITEMS).map(item => {
                 const currentAmount = Math.floor(playerResources[item.id] || 0)
                 const totalValue = currentAmount * item.sellPrice
@@ -107,41 +109,43 @@ const MarketView = () => {
                 const itemName = t(`items.${item.id}.name`, item.name)
                 const itemDescription = t(`items.${item.id}.description`, item.description)
 
+                const flashClass = feedback?.type === 'gain' ? styles.cardFlashGain : feedback?.type === 'spend' ? styles.cardFlashSpend : ''
+
                 return (
                   <div
                     key={item.id}
-                    className={`market-card ${feedback ? `card-flash-${feedback.type}` : ''}`}
+                    className={`${styles.marketCard} ${flashClass}`}
                   >
                     {feedback && (
-                      <div className={`floating-trade-feedback ${feedback.type}`}>
+                      <div className={`${styles.floatingTradeFeedback} ${styles[feedback.type] || ''}`}>
                         {feedback.text}
                       </div>
                     )}
 
-                    <div className="market-card-top">
-                      <span className="market-item-icon">{item.icon}</span>
+                    <div className={styles.marketCardTop}>
+                      <span className={styles.marketItemIcon}>{item.icon}</span>
                       <div>
                         <h3>{itemName}</h3>
-                        <p className="item-description">{itemDescription}</p>
+                        <p className={styles.itemDescription}>{itemDescription}</p>
                       </div>
                     </div>
 
-                    <div className="market-card-stats">
-                      <div className="stat-row">
+                    <div className={styles.marketCardStats}>
+                      <div className={styles.statRow}>
                         <span>{t('market.sellPrice')}:</span>
                         <strong className="text-success">${item.sellPrice} / {t('resources.units')}</strong>
                       </div>
-                      <div className="stat-row">
+                      <div className={styles.statRow}>
                         <span>{t('market.inStorage')}:</span>
                         <strong>{formatNumber(currentAmount)} {t('resources.units')}</strong>
                       </div>
-                      <div className="stat-row">
+                      <div className={styles.statRow}>
                         <span>{t('market.totalValue')}:</span>
                         <strong>${formatNumber(totalValue)}</strong>
                       </div>
                     </div>
 
-                    <div className="market-card-actions">
+                    <div className={styles.marketCardActions}>
                       <Button
                         onClick={() => handleSell(item, 1)}
                         disabled={currentAmount < 1}
@@ -174,46 +178,48 @@ const MarketView = () => {
             </div>
           </div>
         ) : (
-          <div className="trade-section">
+          <div className={styles.tradeSection}>
             <h2>{t('market.buySectionTitle')}</h2>
-            <div className="market-grid">
+            <div className={styles.marketGrid}>
               {Object.values(MARKET_ITEMS).map(item => {
                 const currentStock = Math.floor(playerResources[item.id] || 0)
                 const feedback = activeFeedback[item.id]
                 const itemName = t(`items.${item.id}.name`, item.name)
                 const itemDescription = t(`items.${item.id}.description`, item.description)
 
+                const flashClass = feedback?.type === 'gain' ? styles.cardFlashGain : feedback?.type === 'spend' ? styles.cardFlashSpend : ''
+
                 return (
                   <div
                     key={item.id}
-                    className={`market-card ${feedback ? `card-flash-${feedback.type}` : ''}`}
+                    className={`${styles.marketCard} ${flashClass}`}
                   >
                     {feedback && (
-                      <div className={`floating-trade-feedback ${feedback.type}`}>
+                      <div className={`${styles.floatingTradeFeedback} ${styles[feedback.type] || ''}`}>
                         {feedback.text}
                       </div>
                     )}
 
-                    <div className="market-card-top">
-                      <span className="market-item-icon">{item.icon}</span>
+                    <div className={styles.marketCardTop}>
+                      <span className={styles.marketItemIcon}>{item.icon}</span>
                       <div>
                         <h3>{itemName}</h3>
-                        <p className="item-description">{itemDescription}</p>
+                        <p className={styles.itemDescription}>{itemDescription}</p>
                       </div>
                     </div>
 
-                    <div className="market-card-stats">
-                      <div className="stat-row">
+                    <div className={styles.marketCardStats}>
+                      <div className={styles.statRow}>
                         <span>{t('market.buyPrice')}:</span>
                         <strong className="text-warning">${item.buyPrice} / {t('resources.units')}</strong>
                       </div>
-                      <div className="stat-row">
+                      <div className={styles.statRow}>
                         <span>{t('market.currentStock')}:</span>
                         <strong>{formatNumber(currentStock)} {t('resources.units')}</strong>
                       </div>
                     </div>
 
-                    <div className="market-card-actions">
+                    <div className={styles.marketCardActions}>
                       <Button
                         onClick={() => handleBuy(item, 1)}
                         disabled={money < item.buyPrice}

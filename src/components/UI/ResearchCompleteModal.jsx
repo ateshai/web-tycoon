@@ -4,6 +4,8 @@ import { useGameStore } from '../../store/gameStore'
 import { BUILDINGS } from '../../logic/constants'
 import Button from './Button'
 
+import styles from './ResearchCompleteModal.module.css'
+
 const ResearchCompleteModal = () => {
   const { t } = useTranslation()
   const completedResearch = useGameStore(state => state.completedResearch)
@@ -40,10 +42,10 @@ const ResearchCompleteModal = () => {
   const affectsTarget = completedResearch.affects ? t(`buildings.${completedResearch.affects}.name`, completedResearch.affects) : ''
 
   return (
-    <div className="modal-backdrop completion-backdrop" onClick={dismissCompletedResearch}>
-      <div className="modal-container completion-modal" onClick={e => e.stopPropagation()}>
-        <div className="completion-confetti-header">
-          <span className="celebration-badge">{t('research.modal.title')}</span>
+    <div className={`modal-backdrop ${styles.completionBackdrop}`} onClick={dismissCompletedResearch}>
+      <div className={`modal-container ${styles.completionModal}`} onClick={e => e.stopPropagation()}>
+        <div className={styles.completionConfettiHeader}>
+          <span className={styles.celebrationBadge}>{t('research.modal.title')}</span>
           <button
             className="modal-close-button"
             onClick={dismissCompletedResearch}
@@ -53,34 +55,34 @@ const ResearchCompleteModal = () => {
           </button>
         </div>
 
-        <div className="completion-modal-body">
-          <div className="completion-icon-ring">
-            <span className="breakthrough-icon">💡</span>
+        <div className={styles.completionModalBody}>
+          <div className={styles.completionIconRing}>
+            <span className={styles.breakthroughIcon}>💡</span>
           </div>
 
           <h2>{upgradeName}</h2>
-          <p className="completion-description">{upgradeDesc}</p>
+          <p className={styles.completionDescription}>{upgradeDesc}</p>
 
-          <div className="completion-benefit-box">
-            <span className="benefit-label">{t('research.modal.activeBenefit')}</span>
-            <strong className="benefit-value text-success">
+          <div className={styles.completionBenefitBox}>
+            <span className={styles.benefitLabel}>{t('research.modal.activeBenefit')}</span>
+            <strong className={`${styles.benefitValue} text-success`}>
               {unlockedBuilding
                 ? t('research.modal.unlockedDesc', { name: buildingName })
                 : t('research.modal.bonusDesc', { bonus: Math.round((completedResearch.multiplier || 0) * 100), target: affectsTarget })}
             </strong>
           </div>
 
-          <div className="countdown-auto-bar">
+          <div className={styles.countdownAutoBar}>
             <div
-              className="countdown-progress-fill"
+              className={styles.countdownProgressFill}
               style={{ width: `${(countdown / 5) * 100}%` }}
             />
           </div>
-          <span className="countdown-text">{t('research.modal.autoClosing', { count: countdown })}</span>
+          <span className={styles.countdownText}>{t('research.modal.autoClosing', { count: countdown })}</span>
 
           <Button
             variant="primary"
-            className="claim-research-btn"
+            className={styles.claimResearchBtn}
             onClick={dismissCompletedResearch}
           >
             {t('research.modal.continueBtn')}

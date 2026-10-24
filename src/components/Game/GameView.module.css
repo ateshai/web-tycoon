@@ -1,0 +1,100 @@
+.gameContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.gameHeaderBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--surface-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gameLogo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.logoIcon {
+  font-size: 1.5rem;
+}
+
+.logoText {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #ffffff, #a1a1aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gameContent {
+  flex: 1;
+}
+
+.withBottomBar {
+  padding-bottom: 100px;
+}
+
+/* Header Active Research Progress Banner */
+.researchHeaderBanner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 152, 0, 0.08);
+  border: 1px solid rgba(255, 152, 0, 0.25);
+  padding: 6px 14px;
+  border-radius: var(--border-radius-md);
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { border-color: rgba(255, 152, 0, 0.25); }
+  50% { border-color: rgba(255, 152, 0, 0.5); }
+}
+
+.researchBannerInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-small);
+  color: var(--text-primary);
+}
+
+.bannerIcon {
+  font-size: 1.1rem;
+  margin-right: 6px;
+}
+
+.bannerTitle {
+  flex: 1;
+}
+
+.bannerCountdown {
+  font-weight: 700;
+  color: #ff9800;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.researchHeaderProgressTrack {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.researchHeaderProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9800, #4caf50);
+  border-radius: 9999px;
+  transition: width 0.2s linear;
+}

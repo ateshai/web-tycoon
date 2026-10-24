@@ -2,13 +2,14 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
-import { getUpgradeMultiplier, calculateResourceProduction } from '../../logic/gameLogic'
+import { getUpgradeMultiplier, calculateResourceProduction, getPopulationStats } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
 import { BUILDINGS } from '../../logic/constants'
+import styles from './CityView.module.css'
 
 const CityView = ({ onOpenBuild }) => {
   const { t } = useTranslation()
-  const { buildings, upgrades, money, wood, stone, plank, knowledge, experience } = useGameStore(state => ({
+  const { buildings, upgrades, money, wood, stone, plank, knowledge, experience, land } = useGameStore(state => ({
     buildings: state.buildings || [],
     upgrades: state.upgrades || [],
     money: state.money || 0,
@@ -16,10 +17,15 @@ const CityView = ({ onOpenBuild }) => {
     stone: state.stone || 0,
     plank: state.plank || 0,
     knowledge: state.knowledge || 0,
-    experience: state.experience || 0
+    experience: state.experience || 0,
+    land: state.land ?? 10
   }))
 
-  const playerResources = { money, wood, stone, plank, knowledge, experience }
+  const usedLand = buildings.length
+  const totalLand = land ?? 10
+  const freeLand = Math.max(0, totalLand - usedLand)
+  const playerResources = { money, wood, stone, plank, knowledge, experience, land: totalLand }
+  const popStats = getPopulationStats(buildings)
 
   // Calculate net production rates per second
   const productionRates = calculateResourceProduction(buildings, upgrades)
@@ -57,6 +63,22 @@ const CityView = ({ onOpenBuild }) => {
       amount: `$${formatNumber(money)}`,
       rate: null,
       description: t('resources.moneyDesc'),
+    },
+    {
+      id: 'land',
+      name: t('resources.land'),
+      icon: '🏞️',
+      amount: `${freeLand}/${totalLand} ${t('resources.freeLand')}`,
+      rate: `${usedLand}/${totalLand} ${t('land.used')}`,
+      description: t('resources.landDesc'),
+    },
+    {
+      id: 'population',
+      name: t('resources.population'),
+      icon: '👥',
+      amount: `${popStats.workingPopulation}/${popStats.totalPopulation}`,
+      rate: `${popStats.freePopulation} ${t('resources.free')}`,
+      description: `${t('resources.workingPopulation')}: ${popStats.workingPopulation} • ${t('resources.freePopulation')}: ${popStats.freePopulation}`,
     },
     {
       id: 'wood',
@@ -101,43 +123,43 @@ const CityView = ({ onOpenBuild }) => {
   ]
 
   return (
-    <div className="screen city-view">
-      <div className="city-header-section">
+    <div className={`screen ${styles.cityView}`}>
+      <div className={styles.cityHeaderSection}>
         <div>
           <h1>{t('city.title')}</h1>
-          <p className="city-subtitle">
+          <p className={styles.citySubtitle}>
             {t('city.subtitle')}
           </p>
         </div>
         {onOpenBuild && (
-          <Button onClick={onOpenBuild} variant="primary" className="hero-build-button">
+          <Button onClick={onOpenBuild} variant="primary" className={styles.heroBuildButton}>
             {t('city.constructBtn')}
           </Button>
         )}
       </div>
 
       {/* Comprehensive Inventory Section */}
-      <section className="dashboard-section">
-        <div className="section-title-row">
+      <section className={styles.dashboardSection}>
+        <div className={styles.sectionTitleRow}>
           <h2>{t('city.inventoryTitle')}</h2>
-          <span className="section-badge">
+          <span className={styles.sectionBadge}>
             {t('city.commoditiesCount', { count: inventoryItems.length })}
           </span>
         </div>
-        <div className="inventory-grid">
+        <div className={styles.inventoryGrid}>
           {inventoryItems.map(item => (
-            <div key={item.id} className="inventory-card">
-              <div className="inventory-card-top">
-                <span className="inventory-icon">{item.icon}</span>
-                <div className="inventory-title-group">
+            <div key={item.id} className={styles.inventoryCard}>
+              <div className={styles.inventoryCardTop}>
+                <span className={styles.inventoryIcon}>{item.icon}</span>
+                <div className={styles.inventoryTitleGroup}>
                   <h3>{item.name}</h3>
-                  <span className="inventory-amount">{item.amount}</span>
+                  <span className={styles.inventoryAmount}>{item.amount}</span>
                 </div>
               </div>
-              <div className="inventory-card-bottom">
-                <p className="inventory-desc">{item.description}</p>
+              <div className={styles.inventoryCardBottom}>
+                <p className={styles.inventoryDesc}>{item.description}</p>
                 {item.rate && (
-                  <div className="inventory-rate-badge">
+                  <div className={styles.inventoryRateBadge}>
                     <span>{t('resources.rate')}: </span>
                     <strong className="text-success">{item.rate}</strong>
                   </div>
@@ -149,43 +171,43 @@ const CityView = ({ onOpenBuild }) => {
       </section>
 
       {/* Net Production Rates Summary */}
-      <section className="dashboard-section">
-        <div className="section-title-row">
+      <section className={styles.dashboardSection}>
+        <div className={styles.sectionTitleRow}>
           <h2>{t('city.productionTitle')}</h2>
-          <span className="section-badge">{t('city.yieldBadge')}</span>
+          <span className={styles.sectionBadge}>{t('city.yieldBadge')}</span>
         </div>
-        <div className="production-summary-grid">
-          <div className="production-summary-card">
-            <span className="summary-icon">🪵</span>
+        <div className={styles.productionSummaryGrid}>
+          <div className={styles.productionSummaryCard}>
+            <span className={styles.summaryIcon}>🪵</span>
             <div>
-              <span className="summary-label">{t('city.woodYield')}</span>
+              <span className={styles.summaryLabel}>{t('city.woodYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.wood || 0).toFixed(2))}/s
               </strong>
             </div>
           </div>
-          <div className="production-summary-card">
-            <span className="summary-icon">🪚</span>
+          <div className={styles.productionSummaryCard}>
+            <span className={styles.summaryIcon}>🪚</span>
             <div>
-              <span className="summary-label">{t('city.plankYield')}</span>
+              <span className={styles.summaryLabel}>{t('city.plankYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.plank || 0).toFixed(2))}/s
               </strong>
             </div>
           </div>
-          <div className="production-summary-card">
-            <span className="summary-icon">🪨</span>
+          <div className={styles.productionSummaryCard}>
+            <span className={styles.summaryIcon}>🪨</span>
             <div>
-              <span className="summary-label">{t('city.stoneYield')}</span>
+              <span className={styles.summaryLabel}>{t('city.stoneYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.stone || 0).toFixed(2))}/s
               </strong>
             </div>
           </div>
-          <div className="production-summary-card">
-            <span className="summary-icon">💡</span>
+          <div className={styles.productionSummaryCard}>
+            <span className={styles.summaryIcon}>💡</span>
             <div>
-              <span className="summary-label">{t('city.knowledgeYield')}</span>
+              <span className={styles.summaryLabel}>{t('city.knowledgeYield')}</span>
               <strong className="summary-value text-warning">
                 +{Number((productionRates.knowledge || 0).toFixed(2))}/s
               </strong>
@@ -195,18 +217,18 @@ const CityView = ({ onOpenBuild }) => {
       </section>
 
       {/* City Constructed Buildings Section */}
-      <section className="dashboard-section">
-        <div className="section-title-row">
+      <section className={styles.dashboardSection}>
+        <div className={styles.sectionTitleRow}>
           <h2>{t('city.activeBuildingsTitle')}</h2>
-          <span className="section-badge">
+          <span className={styles.sectionBadge}>
             {t('city.structuresCount', { count: buildings.length })}
           </span>
         </div>
 
-        <div className="owned-buildings-list">
+        <div className={styles.ownedBuildingsList}>
           {groupedBuildings.length === 0 ? (
-            <div className="empty-buildings-banner">
-              <span className="empty-icon">🏗️</span>
+            <div className={styles.emptyBuildingsBanner}>
+              <span className={styles.emptyIcon}>🏗️</span>
               <h3>{t('city.emptyBuildingsTitle')}</h3>
               <p>{t('city.emptyBuildingsDesc')}</p>
               {onOpenBuild && (
@@ -229,35 +251,45 @@ const CityView = ({ onOpenBuild }) => {
                 ([resKey]) => (playerResources[resKey] || 0) < 1
               )
 
+              const isHouse = (group.id || '').toLowerCase() === 'house'
+
               return (
-                <div key={group.id} className={`owned-building-row ${isStarved ? 'starved' : ''}`}>
-                  <div className="building-identity">
+                <div key={group.id} className={`${styles.ownedBuildingRow} ${isStarved ? styles.starved : ''}`}>
+                  <div className={styles.buildingIdentity}>
                     <strong>{translatedBuildingName}</strong>
-                    <span className="building-count-badge">x{group.count}</span>
+                    <span className={styles.buildingCountBadge}>x{group.count}</span>
                     {isStarved && (
-                      <span className="status-badge warning" style={{ marginLeft: '8px', fontSize: '0.72rem' }}>
+                      <span className={`${styles.statusBadge} ${styles.warning}`} style={{ marginLeft: '8px', fontSize: '0.72rem' }}>
                         ⚠️ {t('build.materialsMissing')}
                       </span>
                     )}
                   </div>
-                  <div className="building-production-info">
-                    {group.consumes && Object.entries(group.consumes).map(([resKey, req]) => {
-                      const totalCons = Number((req * (group.productionQuantityPerBuilding || 1) * multiplier * group.count).toFixed(2))
-                      const resName = t(`resources.${resKey}`, resKey)
-                      return (
-                        <span key={resKey} className="production-pill text-warning" title={t('build.consumes')}>
-                          -{totalCons} {resName}/s
-                        </span>
-                      )
-                    })}
-                    <span className="production-pill text-success">
-                      +{totalProduction} {translatedProduct}/s
-                      {bonusPct > 0 && ` (+${bonusPct}%)`}
-                    </span>
-                    {totalKnowledge > 0 && (
-                      <span className="production-pill text-warning">
-                        +{totalKnowledge} 💡/s
+                  <div className={styles.buildingProductionInfo}>
+                    {isHouse ? (
+                      <span className={`${styles.productionPill} text-success`}>
+                        +{5 * group.count} 👥 {t('resources.population')}
                       </span>
+                    ) : (
+                      <>
+                        {group.consumes && Object.entries(group.consumes).map(([resKey, req]) => {
+                          const totalCons = Number((req * (group.productionQuantityPerBuilding || 1) * multiplier * group.count).toFixed(2))
+                          const resName = t(`resources.${resKey}`, resKey)
+                          return (
+                            <span key={resKey} className={`${styles.productionPill} text-warning`} title={t('build.consumes')}>
+                              -{totalCons} {resName}/s
+                            </span>
+                          )
+                        })}
+                        <span className={`${styles.productionPill} text-success`}>
+                          +{totalProduction} {translatedProduct}/s
+                          {bonusPct > 0 && ` (+${bonusPct}%)`}
+                        </span>
+                        {totalKnowledge > 0 && (
+                          <span className={`${styles.productionPill} text-warning`}>
+                            +{totalKnowledge} 💡/s
+                          </span>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

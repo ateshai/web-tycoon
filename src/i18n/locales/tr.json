@@ -24,10 +24,39 @@
     "knowledgeDesc": "Yeni teknolojileri ve geliştirmeleri açmak için kullanılan bilimsel birikim.",
     "experience": "Deneyim",
     "experienceDesc": "Şehir geliştirdikçe ve hedeflere ulaştıkça kazanılan tecrübe puanı.",
+    "land": "Arazi",
+    "landDesc": "Binaların inşa edilebileceği toplam şehir arazisi.",
+    "freeLand": "Boş Arazi",
+    "usedLand": "Kullanılan Arazi",
+    "population": "Nüfus",
+    "populationDesc": "Şehrinizde barınan ve üretim tesislerinde çalışan toplam insan kaynağı.",
+    "workingPopulation": "Çalışan Nüfus",
+    "freePopulation": "Boştaki Nüfus",
+    "free": "Boşta",
+    "working": "Çalışan",
+    "worker": "İşçi",
+    "workerRequired": "İşgücü İhtiyacı",
+    "populationProvided": "Sağlanan Nüfus",
+    "noWorkersWarning": "Yetersiz Nüfus! Yeni işçi için Ev inşa etmelisiniz.",
     "units": "adet",
     "points": "puan",
     "xp": "XP",
     "rate": "Hız"
+  },
+  "land": {
+    "title": "🏞️ Şehir Arazisi Genişletme",
+    "subtitle": "Yeni binalar inşa edebilmek için şehrinize ek arazi parselleri satın alın.",
+    "status": "Arazi Parseli Durumu",
+    "used": "Kullanılan",
+    "free": "Boş",
+    "total": "Toplam",
+    "currentPrice": "Birim Fiyat",
+    "priceTierNotice": "Her 25 birim araziden sonra birim fiyat %50 artar.",
+    "buyOption": "+{{amount}} Arazi (${{cost}})",
+    "toastSuccessTitle": "Arazi Genişletildi!",
+    "toastSuccessMsg": "{{count}} birim yeni şehir arazisi tapusu alındı",
+    "noLandWarning": "🔒 Yetersiz Arazi! Önce yukarıdan arazi satın almalısınız.",
+    "requiresLand": "Gereken Arazi: 1 Parsel"
   },
   "city": {
     "title": "Şehir Kontrol Paneli",
@@ -145,6 +174,10 @@
     "resetBtn": "Oyunu Sıfırla"
   },
   "buildings": {
+    "house": {
+      "name": "Ev",
+      "description": "Vatandaşlar için barınma alanı sağlar. Her ev şehre +5 nüfus kazandırır."
+    },
     "woodcutter": {
       "name": "Oduncu",
       "description": "Ormanlardan ham odun toplar."

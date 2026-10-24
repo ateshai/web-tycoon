@@ -2,53 +2,55 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Button from './Button'
 
+import styles from './Navigation.module.css'
+
 const Navigation = ({ currentScreen, onScreenChange, onOpenBuild }) => {
   const { t } = useTranslation()
 
   return (
-    <nav className="bottom-tab-bar" aria-label="Bottom Navigation">
+    <nav className={styles.bottomTabBar} aria-label="Bottom Navigation">
       <button
-        className={`tab-bar-item ${currentScreen === 'city' ? 'active' : ''}`}
+        className={`${styles.tabBarItem} ${currentScreen === 'city' ? styles.active : ''}`}
         onClick={() => onScreenChange('city')}
       >
-        <span className="tab-icon">🏙️</span>
-        <span className="tab-label">{t('nav.city')}</span>
+        <span className={styles.tabIcon}>🏙️</span>
+        <span className={styles.tabLabel}>{t('nav.city')}</span>
       </button>
 
       <button
-        className={`tab-bar-item ${currentScreen === 'market' ? 'active' : ''}`}
+        className={`${styles.tabBarItem} ${currentScreen === 'market' ? styles.active : ''}`}
         onClick={() => onScreenChange('market')}
       >
-        <span className="tab-icon">🛒</span>
-        <span className="tab-label">{t('nav.market')}</span>
+        <span className={styles.tabIcon}>🛒</span>
+        <span className={styles.tabLabel}>{t('nav.market')}</span>
       </button>
 
       <button
-        className="tab-bar-item build-action-btn"
+        className={`${styles.tabBarItem} ${styles.buildActionBtn}`}
         onClick={onOpenBuild}
         title={t('city.openBuildMenu')}
       >
-        <div className="build-icon-bubble">
-          <span className="tab-icon">🔨</span>
+        <div className={styles.buildIconBubble}>
+          <span className={styles.tabIcon}>🔨</span>
         </div>
-        <span className="tab-label">{t('nav.build')}</span>
+        <span className={styles.tabLabel}>{t('nav.build')}</span>
       </button>
 
       <button
-        className={`tab-bar-item ${currentScreen === 'research' ? 'active' : ''}`}
+        className={`${styles.tabBarItem} ${currentScreen === 'research' ? styles.active : ''}`}
         onClick={() => onScreenChange('research')}
       >
-        <span className="tab-icon">💡</span>
-        <span className="tab-label">{t('nav.research')}</span>
+        <span className={styles.tabIcon}>💡</span>
+        <span className={styles.tabLabel}>{t('nav.research')}</span>
       </button>
 
       <button
-        className={`tab-bar-item settings-item ${currentScreen === 'settings' ? 'active' : ''}`}
+        className={`${styles.tabBarItem} ${styles.settingsItem || ''} ${currentScreen === 'settings' ? styles.active : ''}`}
         onClick={() => onScreenChange('settings')}
         title={t('nav.settings')}
         aria-label={t('nav.settings')}
       >
-        <span className="tab-icon gear-icon">⚙️</span>
+        <span className={`${styles.tabIcon} ${styles.gearIcon}`}>⚙️</span>
       </button>
     </nav>
   )

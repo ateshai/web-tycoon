@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import { useSettingsStore } from '../../store/settingsStore'
 
+import styles from './ToastContainer.module.css'
+
 const ToastContainer = () => {
   const { t } = useTranslation()
   const notifications = useGameStore(state => state.notifications || [])
@@ -14,42 +16,42 @@ const ToastContainer = () => {
   }
 
   return (
-    <div className="toast-container" aria-live="polite">
+    <div className={styles.toastContainer} aria-live="polite">
       {notifications.map(toast => {
         const isSuccess = toast.type === 'success'
         return (
           <div
             key={toast.id}
-            className={`toast-item ${isSuccess ? 'toast-success' : 'toast-info'}`}
+            className={`${styles.toastItem} ${isSuccess ? styles.toastSuccess : styles.toastInfo}`}
             role="alert"
           >
-            <div className="toast-icon-wrap">
-              <span className="toast-icon">{toast.icon}</span>
+            <div className={styles.toastIconWrap}>
+              <span className={styles.toastIcon}>{toast.icon}</span>
             </div>
 
-            <div className="toast-content">
-              <div className="toast-header-row">
-                <span className="toast-title">{toast.title}</span>
+            <div className={styles.toastContent}>
+              <div className={styles.toastHeaderRow}>
+                <span className={styles.toastTitle}>{toast.title}</span>
                 {toast.badge && (
-                  <span className={`toast-badge ${isSuccess ? 'badge-gain' : 'badge-spend'}`}>
+                  <span className={`${styles.toastBadge} ${isSuccess ? styles.badgeGain : styles.badgeSpend}`}>
                     {toast.badge}
                   </span>
                 )}
               </div>
-              <p className="toast-message">{toast.message}</p>
+              <p className={styles.toastMessage}>{toast.message}</p>
             </div>
 
             <button
-              className="toast-close-btn"
+              className={styles.toastCloseBtn}
               onClick={() => removeNotification(toast.id)}
               aria-label={t('settings.cancelBtn')}
             >
               ✕
             </button>
 
-            <div className="toast-progress-track">
+            <div className={styles.toastProgressTrack}>
               <div
-                className={`toast-progress-bar ${isSuccess ? 'bar-success' : 'bar-info'}`}
+                className={`${styles.toastProgressBar} ${isSuccess ? styles.barSuccess : styles.barInfo}`}
                 style={{ animationDuration: `${toast.duration || 3500}ms` }}
               />
             </div>

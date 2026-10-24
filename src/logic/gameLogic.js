@@ -141,3 +141,65 @@ export const loadGameState = () => {
   const savedState = localStorage.getItem('gameState')
   return savedState ? JSON.parse(savedState) : null
 }
+
+// Calculate land cost based on tiered pricing
+// Every 25 units owned, price increases by 50% from the previous tier (1000 -> 1500 -> 2250 -> ...)
+export const calculateLandCost = (currentTotalLand, amountToBuy) => {
+  let totalCost = 0
+  for (let i = 0; i < amountToBuy; i++) {
+    const unitIndex = (currentTotalLand || 0) + i
+    const tier = Math.floor(unitIndex / 25)
+    const unitPrice = Math.round(1000 * Math.pow(1.5, tier))
+    totalCost += unitPrice
+  }
+  return totalCost
+}
+
+// Get the current single unit price for the next land purchase
+export const getCurrentLandUnitPrice = (currentTotalLand) => {
+  const tier = Math.floor((currentTotalLand || 0) / 25)
+  return Math.round(1000 * Math.pow(1.5, tier))
+}
+
+// Check if player has available free land for construction
+export const hasFreeLand = (buildings = [], totalLand = 10) => {
+  const usedLand = buildings.length
+  return (totalLand - usedLand) >= 1
+}
+
+// Calculate total, working, and free population stats
+export const getPopulationStats = (buildings = []) => {
+  const houseCount = buildings.filter(b => (b.id || b.type || '').toLowerCase() === 'house').length
+  // Each house provides 5 population. Ensure at least 1 house initially
+  const totalHouses = (buildings.length === 0) ? 1 : Math.max(1, houseCount)
+  const totalPopulation = totalHouses * 5
+
+  const workingPopulation = buildings.filter(b => {
+    const id = (b.id || b.type || '').toLowerCase()
+    return id !== 'house'
+  }).reduce((sum, b) => {
+    const def = (b.type && BUILDINGS[b.type]) ||
+      (b.id && BUILDINGS[b.id.toUpperCase()]) ||
+      BUILDINGS[b.type?.toUpperCase()] ||
+      b
+    const required = def.workers !== undefined ? def.workers : 1
+    return sum + required
+  }, 0)
+
+  const freePopulation = Math.max(0, totalPopulation - workingPopulation)
+
+  return {
+    totalHouses,
+    totalPopulation,
+    workingPopulation,
+    freePopulation,
+  }
+}
+
+// Check if player has available workforce for constructing a building
+export const hasFreeWorkers = (buildingDef, freePopulation) => {
+  const isHouse = (buildingDef.id || buildingDef.type || '').toLowerCase() === 'house'
+  if (isHouse) return true
+  const required = buildingDef.workers !== undefined ? buildingDef.workers : 1
+  return freePopulation >= required
+}

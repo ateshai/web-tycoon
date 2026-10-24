@@ -6,6 +6,8 @@ import { UPGRADES, BUILDINGS } from '../../logic/constants'
 import { meetsRequirements } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
 
+import styles from './ResearchView.module.css'
+
 const ResearchView = () => {
   const { t } = useTranslation()
   const { knowledge, upgrades, buildings, activeResearch, startResearch } = useGameStore(state => ({
@@ -37,18 +39,18 @@ const ResearchView = () => {
   }
 
   return (
-    <div className="screen research-view">
-      <div className="research-header">
+    <div className={`screen ${styles.researchView}`}>
+      <div className={styles.researchHeader}>
         <h1>{t('research.title')}</h1>
-        <div className="knowledge-pill">
+        <div className={styles.knowledgePill}>
           <span>💡 {t('research.availableKnowledge')}: <strong>{formatNumber(knowledge)}</strong></span>
         </div>
       </div>
-      <p className="research-subtitle">
+      <p className={styles.researchSubtitle}>
         {t('research.subtitle')}
       </p>
 
-      <div className="upgrades-grid">
+      <div className={styles.upgradesGrid}>
         {Object.entries(UPGRADES).map(([key, upgrade]) => {
           const isPurchased = upgrades.some(u => u.id === upgrade.id)
           const isCurrentResearch = activeResearch?.upgrade?.id === upgrade.id
@@ -66,20 +68,28 @@ const ResearchView = () => {
           const unlockedName = unlockedBuilding ? t(`buildings.${unlockedBuilding.id}.name`, unlockedBuilding.name) : ''
           const affectsName = upgrade.affects ? t(`buildings.${upgrade.affects}.name`, upgrade.affects) : ''
 
+          const cardStatusClass = isPurchased
+            ? styles.purchased
+            : isCurrentResearch
+            ? styles.inProgress
+            : !canResearch
+            ? styles.disabled
+            : ''
+
           return (
             <div
               key={key}
-              className={`upgrade-card ${isPurchased ? 'purchased' : isCurrentResearch ? 'in-progress' : !canResearch ? 'disabled' : ''}`}
+              className={`${styles.upgradeCard} ${cardStatusClass}`}
             >
-              <div className="upgrade-card-header">
+              <div className={styles.upgradeCardHeader}>
                 <h3>{upgradeName}</h3>
-                {isPurchased && <span className="status-badge researched">{t('research.statusResearched')}</span>}
-                {isCurrentResearch && <span className="status-badge researching">{t('research.statusResearching')}</span>}
+                {isPurchased && <span className={`${styles.statusBadge} ${styles.researched}`}>{t('research.statusResearched')}</span>}
+                {isCurrentResearch && <span className={`${styles.statusBadge} ${styles.researching}`}>{t('research.statusResearching')}</span>}
               </div>
 
-              <p className="upgrade-description">{upgradeDesc}</p>
+              <p className={styles.upgradeDescription}>{upgradeDesc}</p>
 
-              <div className="upgrade-details">
+              <div className={styles.upgradeDetails}>
                 <p>
                   <strong>{t('research.cost')}:</strong> 💡 {upgrade.cost?.knowledge || 0} {t('resources.knowledge')}
                 </p>

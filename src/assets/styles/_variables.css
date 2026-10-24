@@ -8,6 +8,10 @@
   --text-secondary: #B0B0B0;
   --error-color: #FF5252;
   --success-color: #4CAF50;
+  --bordeaux-color: #9f1239;
+  --bordeaux-bg: rgba(128, 0, 32, 0.42);
+  --bordeaux-text: #ff6b8b;
+  --bordeaux-border: #9f1239;
 
   /* Spacing */
   --spacing-xs: 4px;

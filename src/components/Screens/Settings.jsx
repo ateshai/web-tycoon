@@ -4,6 +4,8 @@ import { useSettingsStore } from '../../store/settingsStore'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
 
+import styles from './Settings.module.css'
+
 const Settings = () => {
   const { t } = useTranslation()
   const {
@@ -38,49 +40,49 @@ const Settings = () => {
   }
 
   return (
-    <div className="screen settings-view">
-      <div className="settings-header">
+    <div className={`screen ${styles.settingsView}`}>
+      <div className={styles.settingsHeader}>
         <h1>{t('settings.title')}</h1>
-        <p className="settings-subtitle">
+        <p className={styles.settingsSubtitle}>
           {t('settings.subtitle')}
         </p>
       </div>
 
-      <div className="settings-layout">
+      <div className={styles.settingsLayout}>
         {/* Audio Settings Card */}
-        <div className="settings-card">
-          <div className="settings-card-header">
-            <span className="card-header-icon">🔊</span>
+        <div className={styles.settingsCard}>
+          <div className={styles.settingsCardHeader}>
+            <span className={styles.cardHeaderIcon}>🔊</span>
             <div>
               <h2>{t('settings.audioTitle')}</h2>
               <p>{t('settings.audioDesc')}</p>
             </div>
           </div>
 
-          <div className="settings-card-body">
+          <div className={styles.settingsCardBody}>
             {/* Sound FX Toggle */}
-            <div className="setting-row">
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.soundFx')}</span>
-                <span className="setting-desc">{t('settings.soundFxDesc')}</span>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.soundFx')}</span>
+                <span className={styles.settingDesc}>{t('settings.soundFxDesc')}</span>
               </div>
               <button
                 type="button"
-                className={`modern-toggle ${soundEnabled ? 'active' : ''}`}
+                className={`${styles.modernToggle} ${soundEnabled ? styles.active : ''}`}
                 onClick={toggleSound}
                 aria-label={t('settings.soundFx')}
               >
-                <span className="toggle-thumb" />
+                <span className={styles.toggleThumb} />
               </button>
             </div>
 
             {/* Sound FX Volume */}
-            <div className={`setting-row slider-row ${!soundEnabled ? 'disabled' : ''}`}>
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.soundVolume')}</span>
-                <span className="setting-desc">{t('settings.soundVolumeDesc')}</span>
+            <div className={`${styles.settingRow} ${styles.sliderRow} ${!soundEnabled ? styles.disabled : ''}`}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.soundVolume')}</span>
+                <span className={styles.settingDesc}>{t('settings.soundVolumeDesc')}</span>
               </div>
-              <div className="slider-control">
+              <div className={styles.sliderControl}>
                 <input
                   type="range"
                   min="0"
@@ -89,35 +91,35 @@ const Settings = () => {
                   value={soundVolume}
                   disabled={!soundEnabled}
                   onChange={(e) => updateSoundSettings({ soundVolume: parseFloat(e.target.value) })}
-                  className="modern-slider"
+                  className={styles.modernSlider}
                 />
-                <span className="slider-value-pill">{Math.round(soundVolume * 100)}%</span>
+                <span className={styles.sliderValuePill}>{Math.round(soundVolume * 100)}%</span>
               </div>
             </div>
 
             {/* Music Toggle */}
-            <div className="setting-row">
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.music')}</span>
-                <span className="setting-desc">{t('settings.musicDesc')}</span>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.music')}</span>
+                <span className={styles.settingDesc}>{t('settings.musicDesc')}</span>
               </div>
               <button
                 type="button"
-                className={`modern-toggle ${musicEnabled ? 'active' : ''}`}
+                className={`${styles.modernToggle} ${musicEnabled ? styles.active : ''}`}
                 onClick={toggleMusic}
                 aria-label={t('settings.music')}
               >
-                <span className="toggle-thumb" />
+                <span className={styles.toggleThumb} />
               </button>
             </div>
 
             {/* Music Volume */}
-            <div className={`setting-row slider-row ${!musicEnabled ? 'disabled' : ''}`}>
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.musicVolume')}</span>
-                <span className="setting-desc">{t('settings.musicVolumeDesc')}</span>
+            <div className={`${styles.settingRow} ${styles.sliderRow} ${!musicEnabled ? styles.disabled : ''}`}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.musicVolume')}</span>
+                <span className={styles.settingDesc}>{t('settings.musicVolumeDesc')}</span>
               </div>
-              <div className="slider-control">
+              <div className={styles.sliderControl}>
                 <input
                   type="range"
                   min="0"
@@ -126,42 +128,42 @@ const Settings = () => {
                   value={musicVolume}
                   disabled={!musicEnabled}
                   onChange={(e) => updateSoundSettings({ musicVolume: parseFloat(e.target.value) })}
-                  className="modern-slider"
+                  className={styles.modernSlider}
                 />
-                <span className="slider-value-pill">{Math.round(musicVolume * 100)}%</span>
+                <span className={styles.sliderValuePill}>{Math.round(musicVolume * 100)}%</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Display & Interface Card */}
-        <div className="settings-card">
-          <div className="settings-card-header">
-            <span className="card-header-icon">🖥️</span>
+        <div className={styles.settingsCard}>
+          <div className={styles.settingsCardHeader}>
+            <span className={styles.cardHeaderIcon}>🖥️</span>
             <div>
               <h2>{t('settings.interfaceTitle')}</h2>
               <p>{t('settings.interfaceDesc')}</p>
             </div>
           </div>
 
-          <div className="settings-card-body">
+          <div className={styles.settingsCardBody}>
             {/* Language Selector */}
-            <div className="setting-row">
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.language')}</span>
-                <span className="setting-desc">{t('settings.languageDesc')}</span>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.language')}</span>
+                <span className={styles.settingDesc}>{t('settings.languageDesc')}</span>
               </div>
-              <div className="theme-selector-group">
+              <div className={styles.themeSelectorGroup}>
                 <button
                   type="button"
-                  className={`theme-chip ${language === 'tr' ? 'active' : ''}`}
+                  className={`${styles.themeChip} ${language === 'tr' ? styles.active : ''}`}
                   onClick={() => setLanguage('tr')}
                 >
                   🇹🇷 Türkçe
                 </button>
                 <button
                   type="button"
-                  className={`theme-chip ${language === 'en' ? 'active' : ''}`}
+                  className={`${styles.themeChip} ${language === 'en' ? styles.active : ''}`}
                   onClick={() => setLanguage('en')}
                 >
                   🇬🇧 English
@@ -170,22 +172,22 @@ const Settings = () => {
             </div>
 
             {/* Theme Selector */}
-            <div className="setting-row">
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.theme')}</span>
-                <span className="setting-desc">{t('settings.themeDesc')}</span>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.theme')}</span>
+                <span className={styles.settingDesc}>{t('settings.themeDesc')}</span>
               </div>
-              <div className="theme-selector-group">
+              <div className={styles.themeSelectorGroup}>
                 <button
                   type="button"
-                  className={`theme-chip ${theme === 'dark' ? 'active' : ''}`}
+                  className={`${styles.themeChip} ${theme === 'dark' ? styles.active : ''}`}
                   onClick={() => setTheme('dark')}
                 >
                   {t('settings.dark')}
                 </button>
                 <button
                   type="button"
-                  className={`theme-chip ${theme === 'light' ? 'active' : ''}`}
+                  className={`${styles.themeChip} ${theme === 'light' ? styles.active : ''}`}
                   onClick={() => setTheme('light')}
                 >
                   {t('settings.light')}
@@ -194,57 +196,57 @@ const Settings = () => {
             </div>
 
             {/* Notifications Toggle */}
-            <div className="setting-row">
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.notifications')}</span>
-                <span className="setting-desc">{t('settings.notificationsDesc')}</span>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.notifications')}</span>
+                <span className={styles.settingDesc}>{t('settings.notificationsDesc')}</span>
               </div>
               <button
                 type="button"
-                className={`modern-toggle ${notifications ? 'active' : ''}`}
+                className={`${styles.modernToggle} ${notifications ? styles.active : ''}`}
                 onClick={toggleNotifications}
                 aria-label={t('settings.notifications')}
               >
-                <span className="toggle-thumb" />
+                <span className={styles.toggleThumb} />
               </button>
             </div>
           </div>
         </div>
 
         {/* Game Data & Danger Zone Card */}
-        <div className="settings-card danger-zone-card">
-          <div className="settings-card-header">
-            <span className="card-header-icon">⚠️</span>
+        <div className={`${styles.settingsCard} ${styles.dangerZoneCard}`}>
+          <div className={styles.settingsCardHeader}>
+            <span className={styles.cardHeaderIcon}>⚠️</span>
             <div>
               <h2>{t('settings.dangerTitle')}</h2>
               <p>{t('settings.dangerDesc')}</p>
             </div>
           </div>
 
-          <div className="settings-card-body">
-            <div className="setting-row danger-row">
-              <div className="setting-info">
-                <span className="setting-name">{t('settings.resetTitle')}</span>
-                <span className="setting-desc">
+          <div className={styles.settingsCardBody}>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.resetTitle')}</span>
+                <span className={styles.settingDesc}>
                   {t('settings.resetDesc')}
                 </span>
                 {resetSuccess && (
-                  <span className="reset-success-msg">{t('settings.resetSuccess')}</span>
+                  <span className={styles.resetSuccessMsg}>{t('settings.resetSuccess')}</span>
                 )}
               </div>
-              <div className="danger-actions">
+              <div>
                 {resetConfirm ? (
-                  <div className="confirm-buttons">
+                  <div className={styles.confirmButtons}>
                     <button
                       type="button"
-                      className="confirm-reset-btn"
+                      className={styles.confirmResetBtn}
                       onClick={handleResetGame}
                     >
                       {t('settings.resetConfirmBtn')}
                     </button>
                     <button
                       type="button"
-                      className="cancel-reset-btn"
+                      className={styles.cancelResetBtn}
                       onClick={() => setResetConfirm(false)}
                     >
                       {t('settings.cancelBtn')}
@@ -253,7 +255,7 @@ const Settings = () => {
                 ) : (
                   <button
                     type="button"
-                    className="danger-button"
+                    className={styles.dangerButton}
                     onClick={() => setResetConfirm(true)}
                   >
                     {t('settings.resetBtn')}

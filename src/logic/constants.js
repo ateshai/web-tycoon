@@ -1,11 +1,24 @@
 // Building costs and requirements
 export const BUILDINGS = {
+  HOUSE: {
+    id: 'house',
+    name: 'House',
+    cost: {
+      wood: 50,
+    },
+    workers: 0,
+    providesPopulation: 5,
+    product: null,
+    productionQuantity: 0,
+    knowledge: 0,
+  },
   WOODCUTTER: {
     id: 'woodcutter',
     name: 'Woodcutter',
     cost: {
       wood: 50,
     },
+    workers: 1,
     product: 'wood',
     productionQuantity: 1,
     knowledge: 0.1,
@@ -16,6 +29,7 @@ export const BUILDINGS = {
     cost: {
       wood: 75,
     },
+    workers: 1,
     requirements: {
       woodcutter: 1,
     },
@@ -30,6 +44,7 @@ export const BUILDINGS = {
       money: 50,
       wood: 100,
     },
+    workers: 1,
     requirements: {
       research: 'carpentry',
     },
@@ -119,7 +134,12 @@ export const MARKET_ITEMS = {
   },
 }
 
-// Initial player resources
+// Initial player buildings (starting with 1 House)
+export const INITIAL_BUILDINGS = [
+  { id: 'house', type: 'house', name: 'House' }
+]
+
+// Initial player resources (starting with 5 population and 10 land)
 export const INITIAL_RESOURCES = {
   money: 10,
   wood: 100,
@@ -127,6 +147,17 @@ export const INITIAL_RESOURCES = {
   plank: 0,
   knowledge: 0,
   experience: 0,
+  land: 10,
+  population: 5,
+}
+
+// Land expansion configuration
+export const LAND_CONFIG = {
+  INITIAL_LAND: 10,
+  BASE_PRICE: 1000,
+  TIER_SIZE: 25,
+  PRICE_MULTIPLIER: 1.5,
+  PURCHASE_OPTIONS: [1, 5, 10, 20],
 }
 
 // Resource generation rates

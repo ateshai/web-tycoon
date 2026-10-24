@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { INITIAL_RESOURCES, MARKET_ITEMS, BUILDINGS } from '../logic/constants'
-import { meetsRequirements, getUpgradeMultiplier } from '../logic/gameLogic'
+import { INITIAL_RESOURCES, INITIAL_BUILDINGS, MARKET_ITEMS, BUILDINGS } from '../logic/constants'
+import { meetsRequirements, getUpgradeMultiplier, calculateLandCost, getPopulationStats } from '../logic/gameLogic'
 import { playTradeSound } from '../logic/audio'
 import i18n from '../i18n'
 
@@ -12,7 +12,7 @@ export const useGameStore = create(
       ...INITIAL_RESOURCES,
 
       // Buildings/Assets
-      buildings: [],
+      buildings: INITIAL_BUILDINGS,
       upgrades: [],
 
       // Active timed research and completion modal state
@@ -30,7 +30,7 @@ export const useGameStore = create(
       initialize: () => {
         set({
           ...INITIAL_RESOURCES,
-          buildings: [],
+          buildings: INITIAL_BUILDINGS,
           upgrades: [],
           activeResearch: null,
           completedResearch: null,
@@ -172,19 +172,39 @@ export const useGameStore = create(
         // Check if player meets building requirements (buildings and research)
         const hasRequirements = meetsRequirements(building.requirements, state.buildings, state.upgrades)
 
-        if (canAfford && hasRequirements) {
+        // Check if player has available free land (1 land per building)
+        const totalLand = state.land ?? 10
+        const usedLand = (state.buildings || []).length
+        const hasLand = (totalLand - usedLand) >= 1
+
+        // Check if player has available workforce (all buildings except house require 1 worker)
+        const popStats = getPopulationStats(state.buildings || [])
+        const isHouse = (building.type || building.id || '').toLowerCase() === 'house'
+        const requiredWorkers = isHouse ? 0 : (building.workers !== undefined ? building.workers : 1)
+        const hasWorkers = popStats.freePopulation >= requiredWorkers
+
+        if (canAfford && hasRequirements && hasLand && hasWorkers) {
           set(prevState => {
             const updatedResources = {}
             Object.entries(cost).forEach(([resource, amount]) => {
               updatedResources[resource] = (prevState[resource] ?? 0) - amount
             })
 
+            const newBuildings = [...prevState.buildings, building]
+            const newPopStats = getPopulationStats(newBuildings)
+
             return {
               ...prevState,
               ...updatedResources,
-              buildings: [...prevState.buildings, building]
+              buildings: newBuildings,
+              population: newPopStats.totalPopulation,
             }
           })
+          return { success: true }
+        }
+        return {
+          success: false,
+          reason: !hasLand ? 'no_land' : !hasWorkers ? 'no_workers' : !canAfford ? 'cant_afford' : 'requirements_unmet'
         }
       },
 
@@ -325,6 +345,35 @@ export const useGameStore = create(
             icon: '🛒',
             title: i18n.t('market.toast.buySuccessTitle'),
             message: i18n.t('market.toast.buySuccessMsg', { count: amount, name: itemName }),
+            badge: `-$${totalCost}`,
+            duration: 3500
+          })
+
+          return { success: true, cost: totalCost, amount }
+        }
+        return { success: false }
+      },
+
+      buyLand: (amount) => {
+        const state = get()
+        const currentLand = state.land ?? 10
+        const totalCost = calculateLandCost(currentLand, amount)
+        const currentMoney = state.money || 0
+
+        if (currentMoney >= totalCost && amount > 0) {
+          set(prevState => ({
+            ...prevState,
+            money: prevState.money - totalCost,
+            land: (prevState.land ?? 10) + amount
+          }))
+
+          playTradeSound('buy')
+
+          get().addNotification({
+            type: 'buy',
+            icon: '🏞️',
+            title: i18n.t('land.toastSuccessTitle'),
+            message: i18n.t('land.toastSuccessMsg', { count: amount }),
             badge: `-$${totalCost}`,
             duration: 3500
           })

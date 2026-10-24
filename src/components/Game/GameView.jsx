@@ -11,6 +11,8 @@ import ResearchCompleteModal from '../UI/ResearchCompleteModal'
 import ToastContainer from '../UI/ToastContainer'
 import { useGameStore } from '../../store/gameStore'
 
+import styles from './GameView.module.css'
+
 const GameView = () => {
   const { t } = useTranslation()
   const [currentScreen, setCurrentScreen] = useState('city')
@@ -54,33 +56,33 @@ const GameView = () => {
 
   return (
     <GameLoop>
-      <div className="game-container">
-        <header className="game-header-bar">
+      <div className={styles.gameContainer}>
+        <header className={styles.gameHeaderBar}>
           {researchProgress ? (
-            <div className="research-header-banner">
-              <div className="research-banner-info">
-                <span className="banner-icon">🔬</span>
-                <span className="banner-title">
+            <div className={styles.researchHeaderBanner}>
+              <div className={styles.researchBannerInfo}>
+                <span className={styles.bannerIcon}>🔬</span>
+                <span className={styles.bannerTitle}>
                   {t('app.researching')}: <strong>{t(`upgrades.${activeResearch.upgrade.id}.name`, activeResearch.upgrade.name)}</strong>
                 </span>
-                <span className="banner-countdown">{researchProgress.remaining}s {t('app.left')}</span>
+                <span className={styles.bannerCountdown}>{researchProgress.remaining}s {t('app.left')}</span>
               </div>
-              <div className="research-header-progress-track">
+              <div className={styles.researchHeaderProgressTrack}>
                 <div
-                  className="research-header-progress-fill"
+                  className={styles.researchHeaderProgressFill}
                   style={{ width: `${researchProgress.percent}%` }}
                 />
               </div>
             </div>
           ) : (
-            <div className="game-logo">
-              <span className="logo-icon">🏰</span>
-              <span className="logo-text">{t('app.title')}</span>
+            <div className={styles.gameLogo}>
+              <span className={styles.logoIcon}>🏰</span>
+              <span className={styles.logoText}>{t('app.title')}</span>
             </div>
           )}
         </header>
 
-        <main className="game-content with-bottom-bar">
+        <main className={`${styles.gameContent} ${styles.withBottomBar}`}>
           {renderScreen()}
         </main>
 

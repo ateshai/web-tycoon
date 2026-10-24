@@ -1,0 +1,261 @@
+.buildModal {
+  max-width: 900px;
+}
+
+.modalQuickResources {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Land Expansion Panel */
+.landExpansionPanel {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.08));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.landPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.landPanelTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.landBadgeIcon {
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+}
+
+.landPanelHeader h3 {
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+
+.landPanelSubtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.landStatsPill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+}
+
+.landBuyOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.landBuyBtn {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.buildingsSectionTitle {
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+}
+
+.buildingsSectionTitle h3 {
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.buildingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) 0 var(--spacing-xl);
+}
+
+.buildingCard {
+  background-color: var(--surface-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  transition: opacity var(--transition-normal), border-color var(--transition-normal), filter var(--transition-normal);
+}
+
+.buildingCard.disabled {
+  opacity: 0.88;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.buildingCardHeader h3 {
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.buildingCard p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+}
+
+.buildingCard button {
+  margin-top: var(--spacing-sm);
+}
+
+.buildingConsumesInfo {
+  font-size: 0.82rem;
+}
+
+.multiplierBadge {
+  display: inline-block;
+  background-color: #ff9800;
+  color: #121212;
+  font-size: 0.75rem;
+  padding: 1px 6px;
+  border-radius: var(--border-radius-sm);
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+/* Land requirement row */
+.landRequirementRow {
+  font-size: 0.84rem;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.landRequirementRow.unmet {
+  color: var(--bordeaux-text);
+}
+
+.landUnmetBadge {
+  display: inline-block;
+  color: var(--bordeaux-text);
+  background-color: var(--bordeaux-bg);
+  border: 1px solid var(--bordeaux-border);
+  padding: 1px 6px;
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(159, 18, 57, 0.35);
+}
+
+/* Cost Badges */
+.buildingCostRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.costItemsList {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.costItemWrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.costBadge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.83rem;
+  transition: all var(--transition-fast);
+}
+
+.costBadge.costMet {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.costBadge.costUnmet {
+  color: var(--bordeaux-text);
+  background-color: var(--bordeaux-bg);
+  border: 1px solid var(--bordeaux-border);
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(159, 18, 57, 0.35);
+}
+
+.costSeparator {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Requirement items */
+.buildingRequirementsRow {
+  margin-top: 3px;
+  font-size: var(--font-size-small);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.requirementsList {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.reqItemWrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.requirementBadge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.requirementBadge.reqMet {
+  color: #4ade80;
+  background-color: rgba(76, 175, 80, 0.12);
+  border: 1px solid rgba(76, 175, 80, 0.28);
+}
+
+.requirementBadge.reqUnmet {
+  color: var(--bordeaux-text);
+  background-color: var(--bordeaux-bg);
+  border: 1px solid var(--bordeaux-border);
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(159, 18, 57, 0.35);
+}
