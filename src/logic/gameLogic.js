@@ -1,4 +1,4 @@
-import { BUILDINGS, RESOURCE_RATES, THRESHOLDS } from './constants'
+import { BUILDINGS, RESOURCE_RATES, THRESHOLDS, EXPENSE_CONFIG } from './constants'
 
 // Calculate resource production based on owned buildings and upgrades (Net rates)
 export const calculateResourceProduction = (buildings, upgrades = []) => {
@@ -202,4 +202,113 @@ export const hasFreeWorkers = (buildingDef, freePopulation) => {
   if (isHouse) return true
   const required = buildingDef.workers !== undefined ? buildingDef.workers : 1
   return freePopulation >= required
+}
+
+// Calculate maintenance and special consumption for a single building definition
+export const getBuildingMaintenanceCost = (buildingDef) => {
+  const maintenanceRate = EXPENSE_CONFIG?.BASE_MAINTENANCE_RATE ?? 0.02
+  const fixed = {}
+  const special = {}
+
+  // 1. Fixed maintenance: 2% of construction/production cost
+  const cost = buildingDef?.cost || {}
+  Object.entries(cost).forEach(([res, amount]) => {
+    if (amount > 0) {
+      fixed[res] = Number((amount * maintenanceRate).toFixed(2))
+    }
+  })
+
+  // 2. Special consumptions (e.g. house consumes 1 food, 1 water)
+  const specialCons = buildingDef?.specialConsumption || buildingDef?.upkeep || {}
+  Object.entries(specialCons).forEach(([res, amount]) => {
+    if (amount > 0) {
+      special[res] = Number(amount)
+    }
+  })
+
+  // Total per single building
+  const total = { ...fixed }
+  Object.entries(special).forEach(([res, amount]) => {
+    total[res] = Number(((total[res] || 0) + amount).toFixed(2))
+  })
+
+  return { fixed, special, total }
+}
+
+// Calculate total city expenses across all owned buildings
+export const calculateCityExpenses = (buildings = []) => {
+  const totalPerTick = {}
+  const fixedTotal = {}
+  const specialTotal = {}
+
+  // Group by building type/id
+  const grouped = {}
+
+  buildings.forEach(building => {
+    const key = building.id || building.type || 'unknown'
+    const buildingDef = (building.type && BUILDINGS[building.type]) ||
+      (building.id && BUILDINGS[building.id.toUpperCase()]) ||
+      BUILDINGS[building.type?.toUpperCase()] ||
+      building
+
+    if (!grouped[key]) {
+      const costs = getBuildingMaintenanceCost(buildingDef)
+      grouped[key] = {
+        id: key,
+        name: buildingDef?.name || building?.name || key,
+        count: 0,
+        fixedPerUnit: costs.fixed,
+        specialPerUnit: costs.special,
+        totalPerUnit: costs.total,
+        buildingDef,
+      }
+    }
+    grouped[key].count += 1
+  })
+
+  const breakdown = Object.values(grouped).map(group => {
+    const totalGroupExpense = {}
+    const fixedGroupExpense = {}
+    const specialGroupExpense = {}
+
+    Object.entries(group.fixedPerUnit).forEach(([res, amount]) => {
+      const total = Number((amount * group.count).toFixed(2))
+      fixedGroupExpense[res] = total
+      fixedTotal[res] = Number(((fixedTotal[res] || 0) + total).toFixed(2))
+      totalPerTick[res] = Number(((totalPerTick[res] || 0) + total).toFixed(2))
+    })
+
+    Object.entries(group.specialPerUnit).forEach(([res, amount]) => {
+      const total = Number((amount * group.count).toFixed(2))
+      specialGroupExpense[res] = total
+      specialTotal[res] = Number(((specialTotal[res] || 0) + total).toFixed(2))
+      totalPerTick[res] = Number(((totalPerTick[res] || 0) + total).toFixed(2))
+    })
+
+    Object.entries(group.totalPerUnit).forEach(([res, amount]) => {
+      totalGroupExpense[res] = Number((amount * group.count).toFixed(2))
+    })
+
+    return {
+      ...group,
+      fixedGroupExpense,
+      specialGroupExpense,
+      totalGroupExpense,
+    }
+  })
+
+  const intervalSec = (EXPENSE_CONFIG?.INTERVAL_MS || 10000) / 1000
+  const perSecond = {}
+  Object.entries(totalPerTick).forEach(([res, amount]) => {
+    perSecond[res] = Number((amount / intervalSec).toFixed(3))
+  })
+
+  return {
+    totalPerTick,
+    fixedTotal,
+    specialTotal,
+    breakdown,
+    perSecond,
+    intervalSec,
+  }
 }

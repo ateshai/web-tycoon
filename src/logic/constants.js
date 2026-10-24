@@ -11,6 +11,10 @@ export const BUILDINGS = {
     product: null,
     productionQuantity: 0,
     knowledge: 0,
+    specialConsumption: {
+      food: 1,
+      water: 1,
+    },
   },
   WOODCUTTER: {
     id: 'woodcutter',
@@ -54,6 +58,30 @@ export const BUILDINGS = {
     product: 'plank',
     productionQuantity: 1,
     knowledge: 0.2,
+  },
+  WELL: {
+    id: 'well',
+    name: 'Water Well',
+    cost: {
+      stone: 10,
+      wood: 5,
+    },
+    workers: 1,
+    product: 'water',
+    productionQuantity: 1,
+    knowledge: 0.1,
+  },
+  HUNTER: {
+    id: 'hunter',
+    name: 'Hunter',
+    cost: {
+      wood: 15,
+      stone: 5,
+    },
+    workers: 1,
+    product: 'food',
+    productionQuantity: 1,
+    knowledge: 0.1,
   },
   // Add more buildings here
 }
@@ -132,6 +160,22 @@ export const MARKET_ITEMS = {
     buyPrice: 18,
     description: 'Refined wood processed by carpenters.',
   },
+  FOOD: {
+    id: 'food',
+    name: 'Food',
+    icon: '🍞',
+    sellPrice: 2,
+    buyPrice: 4,
+    description: 'Essential rations for city residents.',
+  },
+  WATER: {
+    id: 'water',
+    name: 'Water',
+    icon: '💧',
+    sellPrice: 1,
+    buyPrice: 2,
+    description: 'Fresh clean water for city consumption.',
+  },
 }
 
 // Initial player buildings (starting with 1 House)
@@ -145,6 +189,8 @@ export const INITIAL_RESOURCES = {
   wood: 100,
   stone: 0,
   plank: 0,
+  food: 30,
+  water: 30,
   knowledge: 0,
   experience: 0,
   land: 10,
@@ -160,6 +206,13 @@ export const LAND_CONFIG = {
   PURCHASE_OPTIONS: [1, 5, 10, 20],
 }
 
+// Expense and maintenance configuration
+export const EXPENSE_CONFIG = {
+  INTERVAL_MS: 10000, // 10 seconds
+  INTERVAL_SEC: 10,
+  BASE_MAINTENANCE_RATE: 0.02, // 2% of construction cost per tick
+}
+
 // Resource generation rates
 export const RESOURCE_RATES = {
   EXPERIENCE_PER_PROJECT: 10,
@@ -173,6 +226,7 @@ export const THRESHOLDS = {
 // Time constants
 export const TIME = {
   BASE_TICK_RATE: 1000, // 1 second
+  EXPENSE_TICK_RATE: 10000, // 10 seconds
   FAST_FORWARD_MULTIPLIER: 2,
 }
 

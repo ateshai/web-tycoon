@@ -13,11 +13,13 @@ const MarketView = () => {
   const [activeFeedback, setActiveFeedback] = useState({}) // { [itemId]: { text, type, id } }
   const [balancePulse, setBalancePulse] = useState(null) // 'gain' | 'spend' | null
 
-  const { money, wood, stone, plank, sellResource, buyResource } = useGameStore(state => ({
+  const { money, wood, stone, plank, food, water, sellResource, buyResource } = useGameStore(state => ({
     money: state.money || 0,
     wood: state.wood || 0,
     stone: state.stone || 0,
     plank: state.plank || 0,
+    food: state.food || 0,
+    water: state.water || 0,
     sellResource: state.sellResource,
     buyResource: state.buyResource
   }))
@@ -25,7 +27,9 @@ const MarketView = () => {
   const playerResources = {
     wood,
     stone,
-    plank
+    plank,
+    food,
+    water
   }
 
   const triggerFeedback = (itemId, text, type) => {

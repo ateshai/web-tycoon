@@ -15,6 +15,8 @@ const ResourceDisplay = () => {
     wood: state.wood,
     stone: state.stone,
     plank: state.plank,
+    food: state.food,
+    water: state.water,
     land: state.land ?? 10,
     buildings: state.buildings || [],
   }))
@@ -48,6 +50,14 @@ const ResourceDisplay = () => {
       <div className={styles.resourceDisplay} title={t('resources.wood')}>
         <span className={styles.resourceIcon}>🪵</span>
         <span className={styles.resourceValue}>{formatNumber(wood || 0)} {t('resources.wood')}</span>
+      </div>
+      <div className={styles.resourceDisplay} title={t('resources.food')}>
+        <span className={styles.resourceIcon}>🍞</span>
+        <span className={styles.resourceValue}>{formatNumber(food || 0)} {t('resources.food')}</span>
+      </div>
+      <div className={styles.resourceDisplay} title={t('resources.water')}>
+        <span className={styles.resourceIcon}>💧</span>
+        <span className={styles.resourceValue}>{formatNumber(water || 0)} {t('resources.water')}</span>
       </div>
       <div className={styles.resourceDisplay} title={t('resources.plank')}>
         <span className={styles.resourceIcon}>🪚</span>

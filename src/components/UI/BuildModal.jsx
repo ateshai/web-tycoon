@@ -18,6 +18,8 @@ const BuildModal = ({ isOpen, onClose }) => {
       wood: state.wood,
       stone: state.stone,
       plank: state.plank,
+      food: state.food,
+      water: state.water,
       knowledge: state.knowledge,
       experience: state.experience
     },
@@ -161,8 +163,10 @@ const BuildModal = ({ isOpen, onClose }) => {
             👥 {popStats.workingPopulation}/{popStats.totalPopulation} {t('resources.population')} ({popStats.freePopulation} {t('resources.free')})
           </span>
           <span>🪵 {formatNumber(resources.wood || 0)} {t('resources.wood')}</span>
-          <span>🪚 {formatNumber(resources.plank || 0)} {t('resources.plank')}</span>
           <span>🪨 {formatNumber(resources.stone || 0)} {t('resources.stone')}</span>
+          <span>🪚 {formatNumber(resources.plank || 0)} {t('resources.plank')}</span>
+          <span>🍞 {formatNumber(resources.food || 0)} {t('resources.food')}</span>
+          <span>💧 {formatNumber(resources.water || 0)} {t('resources.water')}</span>
           <span>💡 {formatNumber(resources.knowledge || 0)} {t('resources.knowledge')}</span>
         </div>
 

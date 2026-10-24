@@ -20,6 +20,10 @@
     "plankDesc": "Refined lumber processed by carpenters.",
     "stone": "Stone",
     "stoneDesc": "Heavy quarry material cut by stonemasons.",
+    "food": "Food",
+    "foodDesc": "Essential food supplies and rations for citizen sustenance.",
+    "water": "Water",
+    "waterDesc": "Clean drinking water required for citizen survival.",
     "knowledge": "Knowledge",
     "knowledgeDesc": "Scientific insight used to unlock new technologies.",
     "experience": "Experience",
@@ -69,12 +73,24 @@
     "woodYield": "Wood Yield",
     "plankYield": "Plank Yield",
     "stoneYield": "Stone Yield",
+    "foodYield": "Food Yield",
+    "waterYield": "Water Yield",
     "knowledgeYield": "Knowledge Generation",
     "activeBuildingsTitle": "🏛️ Active Buildings in City",
     "structuresCount": "{{count}} Total Structures",
     "emptyBuildingsTitle": "No Buildings Constructed Yet",
     "emptyBuildingsDesc": "Your city needs production structures to begin generating resources and knowledge.",
-    "openBuildMenu": "Open Build Menu"
+    "openBuildMenu": "Open Build Menu",
+    "expensesTitle": "💸 Active City Expenses & Maintenance",
+    "expensesSubtitle": "Fixed building upkeep (2% build cost) and special consumptions (e.g. food & water for houses).",
+    "expenseCycleBadge": "Expense Cycle: {{seconds}}s",
+    "nextDeduction": "Next Expense Deduction",
+    "fixedMaintenance": "Fixed Maintenance (2%)",
+    "specialConsumption": "Special Upkeep",
+    "cycleExpense": "Expense Per Cycle ({{seconds}}s)",
+    "perSecEquivalent": "Per-Second Equivalent",
+    "buildingMaintenance": "Maintenance & Upkeep",
+    "noExpenses": "No active building expenses in your city yet."
   },
   "market": {
     "title": "City Market",
@@ -189,6 +205,14 @@
     "carpenter": {
       "name": "Carpenter",
       "description": "Consumes raw timber to craft processed construction planks."
+    },
+    "well": {
+      "name": "Water Well",
+      "description": "Extracts clean drinking water from underground aquifers. Produces 1 water per second."
+    },
+    "hunter": {
+      "name": "Hunter",
+      "description": "Hunts wild game to secure fresh rations for citizens. Produces 1 food per second."
     }
   },
   "upgrades": {
@@ -217,6 +241,19 @@
     "plank": {
       "name": "Plank",
       "description": "Refined wood processed by carpenters."
+    },
+    "food": {
+      "name": "Food",
+      "description": "Essential rations for city residents."
+    },
+    "water": {
+      "name": "Water",
+      "description": "Fresh drinking water for citizens."
     }
+  },
+  "expenses": {
+    "shortageTitle": "Resource Shortage!",
+    "shortageMsg": "City expenses could not be fully met: {{resources}} depleted!",
+    "shortageBadge": "Unpaid Expenses"
   }
 }

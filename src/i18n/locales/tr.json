@@ -20,6 +20,10 @@
     "plankDesc": "Marangozlar tarafından işlenmiş kaliteli kereste.",
     "stone": "Taş",
     "stoneDesc": "Taş ustaları tarafından ocaklardan çıkarılan ağır yapı malzemesi.",
+    "food": "Yemek",
+    "foodDesc": "Şehir sakinlerinin yaşamını sürdürmesi için gerekli gıda ve erzak.",
+    "water": "Su",
+    "waterDesc": "Vatandaşların tüketimi ve hayatta kalması için temiz içme suyu.",
     "knowledge": "Bilgi",
     "knowledgeDesc": "Yeni teknolojileri ve geliştirmeleri açmak için kullanılan bilimsel birikim.",
     "experience": "Deneyim",
@@ -69,12 +73,24 @@
     "woodYield": "Odun Üretimi",
     "plankYield": "Tahta Üretimi",
     "stoneYield": "Taş Üretimi",
+    "foodYield": "Yemek Üretimi",
+    "waterYield": "Su Üretimi",
     "knowledgeYield": "Bilgi Üretimi",
     "activeBuildingsTitle": "🏛️ Şehirdeki Aktif Binalar",
     "structuresCount": "{{count}} Toplam Yapı",
     "emptyBuildingsTitle": "Henüz Hiç Bina İnşa Edilmedi",
     "emptyBuildingsDesc": "Şehrinizin kaynak ve bilgi üretmeye başlaması için üretim binalarına ihtiyacı var.",
-    "openBuildMenu": "İnşaat Menüsünü Aç"
+    "openBuildMenu": "İnşaat Menüsünü Aç",
+    "expensesTitle": "💸 Aktif Şehir Giderleri & Bakım Masrafları",
+    "expensesSubtitle": "Binaların sabit bakım (%2 inşa maliyeti) ve özel tüketim (ör. evler için yemek & su) masrafları.",
+    "expenseCycleBadge": "Masraf Döngüsü: {{seconds}}sn",
+    "nextDeduction": "Sonraki Masraf Kesintisi",
+    "fixedMaintenance": "Sabit Bakım (%2)",
+    "specialConsumption": "Özel Tüketim",
+    "cycleExpense": "Döngü Başına Gider ({{seconds}}sn)",
+    "perSecEquivalent": "Saniye Eşdeğeri",
+    "buildingMaintenance": "Bakım & Gider",
+    "noExpenses": "Şehirde henüz masraf oluşturan aktif bina bulunmuyor."
   },
   "market": {
     "title": "Şehir Pazarı",
@@ -189,6 +205,14 @@
     "carpenter": {
       "name": "Marangoz",
       "description": "Ham odun harcayarak işlenmiş inşaat tahtası üretir."
+    },
+    "well": {
+      "name": "Su Kuyusu",
+      "description": "Yeraltı kaynaklarından temiz içme suyu sağlar. Saniyede 1 su üretir."
+    },
+    "hunter": {
+      "name": "Avcı",
+      "description": "Doğadan avlanarak şehir sakinleri için taze erzak temin eder. Saniyede 1 yemek üretir."
     }
   },
   "upgrades": {
@@ -217,6 +241,19 @@
     "plank": {
       "name": "Tahta",
       "description": "Marangozlar tarafından işlenmiş kereste."
+    },
+    "food": {
+      "name": "Yemek",
+      "description": "Şehir sakinleri için temel gıda erzağı."
+    },
+    "water": {
+      "name": "Su",
+      "description": "Şehir sakinleri için temiz içme suyu."
     }
+  },
+  "expenses": {
+    "shortageTitle": "Kaynak Yetersizliği!",
+    "shortageMsg": "Şehir giderleri tam karşılanamadı: {{resources}} tükendi!",
+    "shortageBadge": "Gider Karşılanamadı"
   }
 }

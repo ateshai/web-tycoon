@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { INITIAL_RESOURCES, INITIAL_BUILDINGS, MARKET_ITEMS, BUILDINGS } from '../logic/constants'
-import { meetsRequirements, getUpgradeMultiplier, calculateLandCost, getPopulationStats } from '../logic/gameLogic'
+import { meetsRequirements, getUpgradeMultiplier, calculateLandCost, getPopulationStats, calculateCityExpenses } from '../logic/gameLogic'
 import { playTradeSound } from '../logic/audio'
 import i18n from '../i18n'
 
@@ -24,6 +24,8 @@ export const useGameStore = create(
 
       // Game state
       lastUpdate: Date.now(),
+      lastExpenseTick: Date.now(),
+      lastExpenseSummary: null,
       gameSpeed: 1,
 
       // Actions
@@ -36,6 +38,8 @@ export const useGameStore = create(
           completedResearch: null,
           notifications: [],
           lastUpdate: Date.now(),
+          lastExpenseTick: Date.now(),
+          lastExpenseSummary: null,
           gameSpeed: 1
         })
       },
@@ -51,6 +55,8 @@ export const useGameStore = create(
           wood: state.wood || 0,
           stone: state.stone || 0,
           plank: state.plank || 0,
+          food: state.food !== undefined ? state.food : (INITIAL_RESOURCES.food || 0),
+          water: state.water !== undefined ? state.water : (INITIAL_RESOURCES.water || 0),
           knowledge: state.knowledge || 0,
           money: state.money || 0,
           experience: state.experience || 0,
@@ -381,6 +387,71 @@ export const useGameStore = create(
           return { success: true, cost: totalCost, amount }
         }
         return { success: false }
+      },
+
+      processExpenses: () => {
+        const state = get()
+        const buildings = state.buildings || []
+        const expenseData = calculateCityExpenses(buildings)
+        const { totalPerTick } = expenseData
+
+        const currentResources = {
+          wood: state.wood || 0,
+          stone: state.stone || 0,
+          plank: state.plank || 0,
+          food: state.food !== undefined ? state.food : (INITIAL_RESOURCES.food || 0),
+          water: state.water !== undefined ? state.water : (INITIAL_RESOURCES.water || 0),
+          knowledge: state.knowledge || 0,
+          money: state.money || 0,
+          experience: state.experience || 0,
+        }
+
+        const shortages = {}
+        const deducted = {}
+
+        Object.entries(totalPerTick).forEach(([res, needed]) => {
+          const avail = currentResources[res] ?? 0
+          if (avail < needed) {
+            shortages[res] = Number((needed - avail).toFixed(2))
+            deducted[res] = avail
+            currentResources[res] = 0
+          } else {
+            deducted[res] = needed
+            currentResources[res] = Number((avail - needed).toFixed(2))
+          }
+        })
+
+        const hasShortage = Object.keys(shortages).length > 0
+
+        set(prevState => ({
+          ...prevState,
+          ...currentResources,
+          lastExpenseTick: Date.now(),
+          lastExpenseSummary: {
+            totalPerTick,
+            deducted,
+            shortages,
+            timestamp: Date.now(),
+          }
+        }))
+
+        // If a shortage occurred, alert the player
+        if (hasShortage) {
+          const missingNames = Object.keys(shortages)
+            .map(k => i18n.t(`resources.${k}`, k))
+            .join(', ')
+
+          get().addNotification({
+            type: 'warning',
+            icon: '⚠️',
+            title: i18n.t('expenses.shortageTitle', 'Kaynak Eksikliği!'),
+            message: i18n.t('expenses.shortageMsg', { resources: missingNames, defaultValue: `Şehir giderleri tam karşılanamadı: ${missingNames} tükendi!` }),
+            badge: i18n.t('expenses.shortageBadge', 'Masraf Ödenemedi'),
+            duration: 4000
+          })
+        }
+
+        return { totalPerTick, deducted, shortages }
       },
 
       // Add more game actions here
