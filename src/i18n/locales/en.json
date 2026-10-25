@@ -24,6 +24,10 @@
     "foodDesc": "Essential food supplies and rations for citizen sustenance.",
     "water": "Water",
     "waterDesc": "Clean drinking water required for citizen survival.",
+    "grain": "Grain",
+    "grainDesc": "Agricultural crop harvested from farms, essential for flour production.",
+    "flour": "Flour",
+    "flourDesc": "Fine flour milled from grain, used by bakeries to produce hearty food.",
     "knowledge": "Knowledge",
     "knowledgeDesc": "Scientific insight used to unlock new technologies.",
     "experience": "Experience",
@@ -45,7 +49,7 @@
     "units": "units",
     "points": "points",
     "xp": "XP",
-    "rate": "Rate"
+    "rate": "State"
   },
   "land": {
     "title": "🏞️ City Territory Expansion",
@@ -75,6 +79,8 @@
     "stoneYield": "Stone Yield",
     "foodYield": "Food Yield",
     "waterYield": "Water Yield",
+    "grainYield": "Grain Yield",
+    "flourYield": "Flour Yield",
     "knowledgeYield": "Knowledge Generation",
     "activeBuildingsTitle": "🏛️ Active Buildings in City",
     "structuresCount": "{{count}} Total Structures",
@@ -90,6 +96,7 @@
     "cycleExpense": "Expense Per Cycle ({{seconds}}s)",
     "perSecEquivalent": "Per-Second Equivalent",
     "buildingMaintenance": "Maintenance & Upkeep",
+    "criticalRateNotice": "Critical Level: Net production is 20% or less of total production! Consider increasing production.",
     "noExpenses": "No active building expenses in your city yet."
   },
   "market": {
@@ -222,6 +229,18 @@
       "name": "Carpenter",
       "description": "Consumes raw timber to craft processed construction planks."
     },
+    "farm": {
+      "name": "Farm",
+      "description": "Cultivates fertile land to grow grain, starting the bread production chain."
+    },
+    "mill": {
+      "name": "Mill",
+      "description": "Grinds harvested grain into flour. Requires Simple Machinery research."
+    },
+    "bakery": {
+      "name": "Bakery",
+      "description": "Bakes fresh hearty food using flour and water for city residents."
+    },
     "well": {
       "name": "Water Well",
       "description": "Extracts clean drinking water from underground aquifers. Produces 1 water per second."
@@ -235,6 +254,18 @@
     "carpentry": {
       "name": "Carpentry",
       "description": "Unlocks the Carpenter building to craft refined wood planks."
+    },
+    "farming": {
+      "name": "Farming",
+      "description": "Enables agriculture techniques and unlocks the Farm building."
+    },
+    "machinery_1": {
+      "name": "Simple Machinery",
+      "description": "Uses mechanical gears and wheels to unlock the Mill building."
+    },
+    "bakery": {
+      "name": "Baking",
+      "description": "Unlocks the Bakery building to bake hearty food from flour and water."
     },
     "woodcutter_efficiency_1": {
       "name": "Sharper Axes (Woodcutter Lvl 1)",
@@ -257,6 +288,14 @@
     "plank": {
       "name": "Plank",
       "description": "Refined wood processed by carpenters."
+    },
+    "grain": {
+      "name": "Grain",
+      "description": "Raw agricultural grain harvested from farms."
+    },
+    "flour": {
+      "name": "Flour",
+      "description": "Finely milled grain suitable for baking."
     },
     "food": {
       "name": "Food",

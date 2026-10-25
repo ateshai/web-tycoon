@@ -23,8 +23,8 @@ export const BUILDINGS = {
     productionQuantity: 0,
     knowledge: 0,
     specialConsumption: {
-      food: 1,
-      water: 1,
+      food: 5,
+      water: 5,
     },
   },
   WOODCUTTER: {
@@ -76,6 +76,67 @@ export const BUILDINGS = {
     productionQuantity: 1,
     knowledge: 0.2,
   },
+  FARM: {
+    id: 'farm',
+    name: 'Farm',
+    category: 'sustenance',
+    icon: '🌾',
+    cost: {
+      money: 40,
+      wood: 40,
+    },
+    workers: 1,
+    requirements: {
+      research: 'farming',
+    },
+    product: 'grain',
+    productionQuantity: 2,
+    knowledge: 0.1,
+  },
+  MILL: {
+    id: 'mill',
+    name: 'Mill',
+    category: 'crafting',
+    icon: '⚙️',
+    cost: {
+      money: 100,
+      wood: 60,
+      stone: 30,
+    },
+    workers: 1,
+    requirements: {
+      research: 'machinery_1',
+      farm: 1,
+    },
+    consumes: {
+      grain: 1,
+    },
+    product: 'flour',
+    productionQuantity: 1,
+    knowledge: 0.2,
+  },
+  BAKERY: {
+    id: 'bakery',
+    name: 'Bakery',
+    category: 'sustenance',
+    icon: '🥖',
+    cost: {
+      money: 120,
+      wood: 50,
+      stone: 50,
+    },
+    workers: 1,
+    requirements: {
+      research: 'bakery',
+    },
+    consumes: {
+      flour: 1,
+      water: 1,
+    },
+    product: 'food',
+    productionQuantity: 3,
+    knowledge: 0.2,
+  },
   WELL: {
     id: 'well',
     name: 'Water Well',
@@ -121,6 +182,52 @@ export const UPGRADES = {
     level: 1,
     requirements: {
       woodcutter: 1,
+    },
+  },
+  FARMING: {
+    id: 'farming',
+    name: 'Farming',
+    description: 'Unlocks the Farm building to harvest grain.',
+    cost: {
+      money: 40,
+      knowledge: 20,
+    },
+    duration: 15, // 15 seconds
+    unlocks: 'farm',
+    level: 1,
+    requirements: {
+      hunter: 1,
+    },
+  },
+  SIMPLE_MACHINERY: {
+    id: 'machinery_1',
+    name: 'Simple Machinery',
+    description: 'Unlocks the Mill building to grind grain into flour.',
+    cost: {
+      money: 100,
+      knowledge: 50,
+    },
+    duration: 25, // 25 seconds
+    unlocks: 'mill',
+    level: 1,
+    requirements: {
+      woodcutter: 1,
+      stonemason: 1,
+    },
+  },
+  BAKING: {
+    id: 'bakery',
+    name: 'Baking',
+    description: 'Unlocks the Bakery building to bake hearty food from flour and water.',
+    cost: {
+      money: 120,
+      knowledge: 60,
+    },
+    duration: 30, // 30 seconds
+    unlocks: 'bakery',
+    level: 1,
+    requirements: {
+      research: 'machinery_1',
     },
   },
   WOODCUTTER_EFFICIENCY_1: {
@@ -181,6 +288,22 @@ export const MARKET_ITEMS = {
     buyPrice: 18,
     description: 'Refined wood processed by carpenters.',
   },
+  GRAIN: {
+    id: 'grain',
+    name: 'Grain',
+    icon: '🌾',
+    sellPrice: 3,
+    buyPrice: 6,
+    description: 'Raw agricultural grain harvested from farms.',
+  },
+  FLOUR: {
+    id: 'flour',
+    name: 'Flour',
+    icon: '🥡',
+    sellPrice: 8,
+    buyPrice: 16,
+    description: 'Finely milled grain suitable for baking.',
+  },
   FOOD: {
     id: 'food',
     name: 'Food',
@@ -210,6 +333,8 @@ export const INITIAL_RESOURCES = {
   wood: 100,
   stone: 0,
   plank: 0,
+  grain: 0,
+  flour: 0,
   food: 30,
   water: 30,
   knowledge: 0,

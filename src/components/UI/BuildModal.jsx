@@ -18,6 +18,8 @@ const BuildModal = ({ isOpen, onClose }) => {
       wood: state.wood,
       stone: state.stone,
       plank: state.plank,
+      grain: state.grain || 0,
+      flour: state.flour || 0,
       food: state.food,
       water: state.water,
       knowledge: state.knowledge,

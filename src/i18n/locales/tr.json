@@ -24,6 +24,10 @@
     "foodDesc": "Şehir sakinlerinin yaşamını sürdürmesi için gerekli gıda ve erzak.",
     "water": "Su",
     "waterDesc": "Vatandaşların tüketimi ve hayatta kalması için temiz içme suyu.",
+    "grain": "Buğday",
+    "grainDesc": "Çiftliklerde yetiştirilen, un üretimi için temel tarım ürünü.",
+    "flour": "Un",
+    "flourDesc": "Değirmenlerde öğütülen, fırınlarda ekmek yapmak için kullanılan un.",
     "knowledge": "Bilgi",
     "knowledgeDesc": "Yeni teknolojileri ve geliştirmeleri açmak için kullanılan bilimsel birikim.",
     "experience": "Deneyim",
@@ -45,7 +49,7 @@
     "units": "adet",
     "points": "puan",
     "xp": "XP",
-    "rate": "Hız"
+    "rate": "Durum"
   },
   "land": {
     "title": "🏞️ Şehir Arazisi Genişletme",
@@ -75,6 +79,8 @@
     "stoneYield": "Taş Üretimi",
     "foodYield": "Yemek Üretimi",
     "waterYield": "Su Üretimi",
+    "grainYield": "Buğday Üretimi",
+    "flourYield": "Un Üretimi",
     "knowledgeYield": "Bilgi Üretimi",
     "activeBuildingsTitle": "🏛️ Şehirdeki Aktif Binalar",
     "structuresCount": "{{count}} Toplam Yapı",
@@ -90,6 +96,7 @@
     "cycleExpense": "Döngü Başına Gider ({{seconds}}sn)",
     "perSecEquivalent": "Saniye Eşdeğeri",
     "buildingMaintenance": "Bakım & Gider",
+    "criticalRateNotice": "Kritik Seviye: Net üretim toplam üretimin %20'si veya altında! Üretimi artırmanız önerilir.",
     "noExpenses": "Şehirde henüz masraf oluşturan aktif bina bulunmuyor."
   },
   "market": {
@@ -221,6 +228,18 @@
       "name": "Marangoz",
       "description": "Ham odun harcayarak işlenmiş inşaat tahtası üretir."
     },
+    "farm": {
+      "name": "Çiftlik",
+      "description": "Toprağı işleyerek buğday üretir. Değirmen ve fırın üretim zincirinin temelini oluşturur."
+    },
+    "mill": {
+      "name": "Değirmen",
+      "description": "Buğdayı öğüterek un üretir. Basit makineler teknolojisi gerektirir."
+    },
+    "bakery": {
+      "name": "Fırın",
+      "description": "Un ve su kullanarak şehir sakinleri için bol miktarda ekmek (yemek) pişirir."
+    },
     "well": {
       "name": "Su Kuyusu",
       "description": "Yeraltı kaynaklarından temiz içme suyu sağlar. Saniyede 1 su üretir."
@@ -234,6 +253,18 @@
     "carpentry": {
       "name": "Marangozluk",
       "description": "İşlenmiş tahta üretmek için Marangoz binasının kilidini açar."
+    },
+    "farming": {
+      "name": "Tarım",
+      "description": "Toprağı ekip biçmeyi sağlayarak Çiftlik binasının kilidini açar."
+    },
+    "machinery_1": {
+      "name": "Basit Makineler",
+      "description": "Çark ve mekanik dişlilerle buğday öğüten Değirmen binasının kilidini açar."
+    },
+    "bakery": {
+      "name": "Fırıncılık",
+      "description": "Un ve sudan yüksek miktarda ekmek üreten Fırın binasının kilidini açar."
     },
     "woodcutter_efficiency_1": {
       "name": "Keskin Baltalar (Oduncu Seviye 1)",
@@ -256,6 +287,14 @@
     "plank": {
       "name": "Tahta",
       "description": "Marangozlar tarafından işlenmiş kereste."
+    },
+    "grain": {
+      "name": "Buğday",
+      "description": "Çiftliklerden hasat edilen temel tahıl."
+    },
+    "flour": {
+      "name": "Un",
+      "description": "Değirmenlerde öğütülmüş kaliteli un."
     },
     "food": {
       "name": "Yemek",

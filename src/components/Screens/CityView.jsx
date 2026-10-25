@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGameStore } from '../../store/gameStore'
 import Button from '../UI/Button'
-import { getUpgradeMultiplier, calculateResourceProduction, getPopulationStats, calculateCityExpenses, getBuildingMaintenanceCost } from '../../logic/gameLogic'
+import { getUpgradeMultiplier, calculateDetailedRates, getPopulationStats, calculateCityExpenses, getBuildingMaintenanceCost } from '../../logic/gameLogic'
 import { formatNumber } from '../../logic/utils'
 import { BUILDINGS } from '../../logic/constants'
 import styles from './CityView.module.css'
 
 const CityView = ({ onOpenBuild }) => {
   const { t } = useTranslation()
-  const { buildings, upgrades, money, wood, stone, plank, food, water, knowledge, experience, land, lastExpenseTick } = useGameStore(state => ({
+  const { buildings, upgrades, money, wood, stone, plank, grain, flour, food, water, knowledge, experience, land, lastExpenseTick } = useGameStore(state => ({
     buildings: state.buildings || [],
     upgrades: state.upgrades || [],
     money: state.money || 0,
     wood: state.wood || 0,
     stone: state.stone || 0,
     plank: state.plank || 0,
+    grain: state.grain || 0,
+    flour: state.flour || 0,
     food: state.food !== undefined ? state.food : 30,
     water: state.water !== undefined ? state.water : 30,
     knowledge: state.knowledge || 0,
@@ -35,7 +37,7 @@ const CityView = ({ onOpenBuild }) => {
   const usedLand = buildings.length
   const totalLand = land ?? 10
   const freeLand = Math.max(0, totalLand - usedLand)
-  const playerResources = { money, wood, stone, plank, food, water, knowledge, experience, land: totalLand }
+  const playerResources = { money, wood, stone, plank, grain, flour, food, water, knowledge, experience, land: totalLand }
   const popStats = getPopulationStats(buildings)
 
   // Calculate city maintenance and active expenses
@@ -45,8 +47,43 @@ const CityView = ({ onOpenBuild }) => {
   const remainingSec = Math.max(0, Math.ceil((intervalMs - elapsedInCycle) / 1000))
   const progressPercent = Math.min(100, Math.max(0, (elapsedInCycle / intervalMs) * 100))
 
-  // Calculate net production rates per second
-  const productionRates = calculateResourceProduction(buildings, upgrades)
+  // Calculate detailed production rates per second
+  const detailedRates = calculateDetailedRates(buildings, upgrades)
+  const productionRates = detailedRates.net
+
+  // Helper to determine net rate and visual status (positive / warning / negative / neutral)
+  const getResourceRateInfo = (resKey) => {
+    const grossProd = resKey === 'knowledge' ? (detailedRates.knowledge || 0) : (detailedRates.production[resKey] || 0)
+    const expPerSec = cityExpenses.perSecond[resKey] || 0
+    const consPerSec = detailedRates.consumption[resKey] || 0
+    const net = (detailedRates.net[resKey] || 0) - expPerSec
+
+    if (grossProd === 0 && expPerSec === 0 && consPerSec === 0) {
+      return {
+        rate: '0/s',
+        rateType: 'neutral',
+        net: 0,
+        grossProd: 0
+      }
+    }
+
+    let rateType = 'positive'
+    if (net < 0) {
+      rateType = 'negative'
+    } else if (grossProd > 0 && net <= grossProd * 0.2) {
+      // Net üretim pozitif olsa bile brüt üretimin %20'si ve altındaysa kritik seviye
+      rateType = 'warning'
+    }
+
+    const formattedRate = `${net > 0 ? '+' : ''}${Number(net.toFixed(2))}/s`
+
+    return {
+      rate: formattedRate,
+      rateType,
+      net,
+      grossProd
+    }
+  }
 
   // Group owned buildings by type
   const groupedBuildings = Object.values(
@@ -103,14 +140,7 @@ const CityView = ({ onOpenBuild }) => {
       name: t('resources.wood'),
       icon: '🪵',
       amount: `${formatNumber(wood)} ${t('resources.units')}`,
-      rate: (() => {
-        const prod = productionRates.wood || 0
-        const expPerSec = cityExpenses.perSecond.wood || 0
-        const net = prod - expPerSec
-        if (prod === 0 && expPerSec === 0) return '0/s'
-        return `${net >= 0 ? '+' : ''}${Number(net.toFixed(2))}/s`
-      })(),
-      rateType: (productionRates.wood || 0) >= (cityExpenses.perSecond.wood || 0) ? 'positive' : 'negative',
+      ...getResourceRateInfo('wood'),
       description: t('resources.woodDesc'),
     },
     {
@@ -118,8 +148,7 @@ const CityView = ({ onOpenBuild }) => {
       name: t('resources.plank'),
       icon: '🪚',
       amount: `${formatNumber(plank)} ${t('resources.units')}`,
-      rate: productionRates.plank ? `+${Number(productionRates.plank.toFixed(2))}/s` : '0/s',
-      rateType: 'positive',
+      ...getResourceRateInfo('plank'),
       description: t('resources.plankDesc'),
     },
     {
@@ -127,23 +156,31 @@ const CityView = ({ onOpenBuild }) => {
       name: t('resources.stone'),
       icon: '🪨',
       amount: `${formatNumber(stone)} ${t('resources.units')}`,
-      rate: productionRates.stone ? `+${Number(productionRates.stone.toFixed(2))}/s` : '0/s',
-      rateType: 'positive',
+      ...getResourceRateInfo('stone'),
       description: t('resources.stoneDesc'),
+    },
+    {
+      id: 'grain',
+      name: t('resources.grain'),
+      icon: '🌾',
+      amount: `${formatNumber(grain)} ${t('resources.units')}`,
+      ...getResourceRateInfo('grain'),
+      description: t('resources.grainDesc'),
+    },
+    {
+      id: 'flour',
+      name: t('resources.flour'),
+      icon: '🥡',
+      amount: `${formatNumber(flour)} ${t('resources.units')}`,
+      ...getResourceRateInfo('flour'),
+      description: t('resources.flourDesc'),
     },
     {
       id: 'food',
       name: t('resources.food'),
       icon: '🍞',
       amount: `${formatNumber(food)} ${t('resources.units')}`,
-      rate: (() => {
-        const prod = productionRates.food || 0
-        const expPerSec = cityExpenses.perSecond.food || 0
-        const net = prod - expPerSec
-        if (prod === 0 && expPerSec === 0) return '0/s'
-        return `${net >= 0 ? '+' : ''}${Number(net.toFixed(2))}/s`
-      })(),
-      rateType: (productionRates.food || 0) >= (cityExpenses.perSecond.food || 0) ? 'positive' : 'negative',
+      ...getResourceRateInfo('food'),
       description: t('resources.foodDesc'),
     },
     {
@@ -151,14 +188,7 @@ const CityView = ({ onOpenBuild }) => {
       name: t('resources.water'),
       icon: '💧',
       amount: `${formatNumber(water)} ${t('resources.units')}`,
-      rate: (() => {
-        const prod = productionRates.water || 0
-        const expPerSec = cityExpenses.perSecond.water || 0
-        const net = prod - expPerSec
-        if (prod === 0 && expPerSec === 0) return '0/s'
-        return `${net >= 0 ? '+' : ''}${Number(net.toFixed(2))}/s`
-      })(),
-      rateType: (productionRates.water || 0) >= (cityExpenses.perSecond.water || 0) ? 'positive' : 'negative',
+      ...getResourceRateInfo('water'),
       description: t('resources.waterDesc'),
     },
     {
@@ -166,8 +196,7 @@ const CityView = ({ onOpenBuild }) => {
       name: t('resources.knowledge'),
       icon: '💡',
       amount: `${formatNumber(knowledge)} ${t('resources.points')}`,
-      rate: productionRates.knowledge ? `+${Number(productionRates.knowledge.toFixed(2))}/s` : '0/s',
-      rateType: 'positive',
+      ...getResourceRateInfo('knowledge'),
       description: t('resources.knowledgeDesc'),
     },
     {
@@ -215,13 +244,37 @@ const CityView = ({ onOpenBuild }) => {
                 </div>
               </div>
               <div className={styles.inventoryCardBottom}>
-                <p className={styles.inventoryDesc}>{item.description}</p>
+                {/* <p className={styles.inventoryDesc}>{item.description}</p> */}
                 {item.rate && (
-                  <div className={`${styles.inventoryRateBadge} ${item.rateType === 'negative' ? styles.negativeRate : ''}`}>
+                  <div className={`${styles.inventoryRateBadge} ${
+                    item.rateType === 'negative'
+                      ? styles.negativeRate
+                      : item.rateType === 'warning'
+                        ? styles.warningRate
+                        : item.rateType === 'positive'
+                          ? styles.positiveRate
+                          : ''
+                  }`}>
                     <span>{t('resources.rate')}: </span>
-                    <strong className={item.rateType === 'negative' ? 'text-danger' : 'text-success'}>
+                    <strong className={
+                      item.rateType === 'negative'
+                        ? 'text-danger'
+                        : item.rateType === 'warning'
+                          ? 'text-warning'
+                          : item.rateType === 'positive'
+                            ? 'text-success'
+                            : ''
+                    }>
                       {item.rate}
                     </strong>
+                    {item.rateType === 'warning' && (
+                      <span
+                        className={styles.criticalWarningIcon}
+                        title={t('city.criticalRateNotice', 'Kritik Seviye: Net üretim toplam üretimin %20\'si veya altında!')}
+                      >
+                        ⚠️
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
@@ -392,6 +445,24 @@ const CityView = ({ onOpenBuild }) => {
               <span className={styles.summaryLabel}>{t('city.stoneYield')}</span>
               <strong className="summary-value text-success">
                 +{Number((productionRates.stone || 0).toFixed(2))}/s
+              </strong>
+            </div>
+          </div>
+          <div className={styles.productionSummaryCard}>
+            <span className={styles.summaryIcon}>🌾</span>
+            <div>
+              <span className={styles.summaryLabel}>{t('city.grainYield', 'Buğday Üretimi')}</span>
+              <strong className={`summary-value ${(productionRates.grain || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                {(productionRates.grain || 0) > 0 ? '+' : ''}{Number((productionRates.grain || 0).toFixed(2))}/s
+              </strong>
+            </div>
+          </div>
+          <div className={styles.productionSummaryCard}>
+            <span className={styles.summaryIcon}>🥡</span>
+            <div>
+              <span className={styles.summaryLabel}>{t('city.flourYield', 'Un Üretimi')}</span>
+              <strong className={`summary-value ${(productionRates.flour || 0) >= 0 ? 'text-success' : 'text-danger'}`}>
+                {(productionRates.flour || 0) > 0 ? '+' : ''}{Number((productionRates.flour || 0).toFixed(2))}/s
               </strong>
             </div>
           </div>

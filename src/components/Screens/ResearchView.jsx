@@ -10,8 +10,19 @@ import styles from './ResearchView.module.css'
 
 const ResearchView = () => {
   const { t } = useTranslation()
-  const { knowledge, upgrades, buildings, activeResearch, startResearch } = useGameStore(state => ({
+  const { resources, knowledge, upgrades, buildings, activeResearch, startResearch } = useGameStore(state => ({
     knowledge: state.knowledge || 0,
+    resources: {
+      knowledge: state.knowledge || 0,
+      money: state.money || 0,
+      wood: state.wood || 0,
+      stone: state.stone || 0,
+      plank: state.plank || 0,
+      grain: state.grain || 0,
+      flour: state.flour || 0,
+      food: state.food || 0,
+      water: state.water || 0,
+    },
     upgrades: state.upgrades || [],
     buildings: state.buildings || [],
     activeResearch: state.activeResearch,
@@ -20,22 +31,70 @@ const ResearchView = () => {
 
   const canAfford = (cost) => {
     if (!cost) return true
-    if (cost.knowledge && knowledge < cost.knowledge) return false
-    return true
+    return Object.entries(cost).every(([resource, amount]) => {
+      return (resources[resource] ?? 0) >= amount
+    })
+  }
+
+  const renderCost = (cost) => {
+    if (!cost || Object.keys(cost).length === 0) return t('build.free', 'Ücretsiz')
+    const iconMap = {
+      knowledge: '💡',
+      money: '💰',
+      wood: '🪵',
+      stone: '🪨',
+      plank: '🪚',
+      grain: '🌾',
+      flour: '🥡',
+      food: '🍞',
+      water: '💧'
+    }
+    return (
+      <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '8px' }}>
+        {Object.entries(cost).map(([res, amount]) => {
+          const hasEnough = (resources[res] ?? 0) >= amount
+          const icon = iconMap[res] || '📦'
+          const name = t(`resources.${res}`, res)
+          return (
+            <span
+              key={res}
+              style={{
+                color: hasEnough ? 'inherit' : 'var(--danger-color, #e74c3c)',
+                fontWeight: hasEnough ? 'normal' : '600'
+              }}
+            >
+              {icon} {formatNumber(amount)} {name}
+            </span>
+          )
+        })}
+      </span>
+    )
   }
 
   const formatRequirements = (requirements) => {
     if (!requirements) return null
-    const reqList = requirements.buildings || requirements
-    return Object.entries(reqList)
-      .map(([buildingKey, count]) => {
-        const found = Object.values(BUILDINGS).find(
-          b => b.id.toLowerCase() === buildingKey.toLowerCase()
-        )
-        const name = found ? t(`buildings.${found.id}.name`, found.name) : buildingKey
-        return `${count} ${name}`
+    const parts = []
+
+    if (requirements.research) {
+      const researchList = Array.isArray(requirements.research) ? requirements.research : [requirements.research]
+      researchList.forEach(id => {
+        const found = Object.values(UPGRADES).find(u => u.id.toLowerCase() === id.toLowerCase())
+        const name = found ? t(`upgrades.${found.id}.name`, found.name) : id
+        parts.push(`🔬 ${name}`)
       })
-      .join(', ')
+    }
+
+    const reqList = requirements.buildings || requirements
+    Object.entries(reqList).forEach(([buildingKey, count]) => {
+      if (buildingKey === 'research') return
+      const found = Object.values(BUILDINGS).find(
+        b => b.id.toLowerCase() === buildingKey.toLowerCase()
+      )
+      const name = found ? t(`buildings.${found.id}.name`, found.name) : buildingKey
+      parts.push(`🏛️ ${count} ${name}`)
+    })
+
+    return parts.join(', ')
   }
 
   return (
@@ -71,10 +130,10 @@ const ResearchView = () => {
           const cardStatusClass = isPurchased
             ? styles.purchased
             : isCurrentResearch
-            ? styles.inProgress
-            : !canResearch
-            ? styles.disabled
-            : ''
+              ? styles.inProgress
+              : !canResearch
+                ? styles.disabled
+                : ''
 
           return (
             <div
@@ -91,7 +150,7 @@ const ResearchView = () => {
 
               <div className={styles.upgradeDetails}>
                 <p>
-                  <strong>{t('research.cost')}:</strong> 💡 {upgrade.cost?.knowledge || 0} {t('resources.knowledge')}
+                  <strong>{t('research.cost')}:</strong> {renderCost(upgrade.cost)}
                 </p>
                 <p>
                   <strong>{t('research.researchTime')}:</strong> ⏱️ {upgrade.duration || 10} {t('research.seconds')}
@@ -118,10 +177,10 @@ const ResearchView = () => {
                 {isPurchased
                   ? t('research.btnResearched')
                   : isCurrentResearch
-                  ? t('research.btnInProgress')
-                  : isAnyResearchActive
-                  ? t('research.btnQueueBusy')
-                  : t('research.btnStart', { duration: upgrade.duration || 10 })}
+                    ? t('research.btnInProgress')
+                    : isAnyResearchActive
+                      ? t('research.btnQueueBusy')
+                      : t('research.btnStart', { duration: upgrade.duration || 10 })}
               </Button>
             </div>
           )

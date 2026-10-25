@@ -116,10 +116,13 @@
 
 .inventoryRateBadge {
   font-size: 0.8rem;
-  background: rgba(76, 175, 80, 0.1);
-  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3px 8px;
   border-radius: var(--border-radius-sm);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* Production Summary Cards */
@@ -500,7 +503,38 @@
   border: 1px solid rgba(244, 67, 54, 0.25);
 }
 
+.positiveRate {
+  background: rgba(76, 175, 80, 0.12) !important;
+  color: #4caf50 !important;
+}
+
+.warningRate {
+  background: rgba(255, 152, 0, 0.15) !important;
+  color: #ff9800 !important;
+  border: 1px solid rgba(255, 152, 0, 0.4) !important;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.15);
+}
+
 .negativeRate {
   background: rgba(244, 67, 54, 0.12) !important;
   color: #ff5252 !important;
+  border: 1px solid rgba(244, 67, 54, 0.25);
+}
+
+.criticalWarningIcon {
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  animation: pulseCritical 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseCritical {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }
