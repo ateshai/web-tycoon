@@ -19,6 +19,7 @@ const useGameLoop = (updateCallback) => {
 
   const startGameLoop = useCallback(() => {
     if (!frameRef.current) {
+      lastUpdateRef.current = Date.now()
       frameRef.current = requestAnimationFrame(gameLoop)
     }
   }, [gameLoop])

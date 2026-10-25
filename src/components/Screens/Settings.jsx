@@ -25,8 +25,36 @@ const Settings = () => {
   } = useSettingsStore()
 
   const initializeGame = useGameStore(state => state.initialize)
+  const cityName = useGameStore(state => state.cityName)
+  const setCityName = useGameStore(state => state.setCityName)
+  const addNotification = useGameStore(state => state.addNotification)
+
+  const [cityInput, setCityInput] = useState(cityName || '')
+  const [cityUpdated, setCityUpdated] = useState(false)
   const [resetConfirm, setResetConfirm] = useState(false)
   const [resetSuccess, setResetSuccess] = useState(false)
+
+  // Sync cityInput when cityName updates
+  React.useEffect(() => {
+    if (cityName) {
+      setCityInput(cityName)
+    }
+  }, [cityName])
+
+  const handleSaveCityName = () => {
+    const trimmed = cityInput.trim()
+    if (!trimmed) return
+    setCityName(trimmed)
+    setCityUpdated(true)
+    addNotification({
+      type: 'success',
+      icon: '🏛️',
+      title: t('settings.cityNameUpdated', 'Şehir İsmi Güncellendi'),
+      message: trimmed,
+      duration: 3000
+    })
+    setTimeout(() => setCityUpdated(false), 2500)
+  }
 
   const handleResetGame = () => {
     if (!resetConfirm) {
@@ -209,6 +237,64 @@ const Settings = () => {
               >
                 <span className={styles.toggleThumb} />
               </button>
+            </div>
+          </div>
+        </div>
+
+        {/* City Management Card */}
+        <div className={styles.settingsCard}>
+          <div className={styles.settingsCardHeader}>
+            <span className={styles.cardHeaderIcon}>🏛️</span>
+            <div>
+              <h2>{t('settings.cityTitle', 'Şehir Yönetimi')}</h2>
+              <p>{t('settings.cityDesc', 'Şehrinizin resmi adını özelleştirin')}</p>
+            </div>
+          </div>
+
+          <div className={styles.settingsCardBody}>
+            <div className={styles.settingRow}>
+              <div className={styles.settingInfo}>
+                <span className={styles.settingName}>{t('settings.cityNameLabel', 'Şehir İsmi')}</span>
+                <span className={styles.settingDesc}>
+                  {t('settings.cityNameDesc', 'Header alanında ve resmi kayıtlarda görüntülenen isim')}
+                </span>
+                {cityUpdated && (
+                  <span className={styles.resetSuccessMsg}>✓ {t('settings.cityNameUpdated', 'Şehir ismi güncellendi!')}</span>
+                )}
+              </div>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={cityInput}
+                  onChange={(e) => setCityInput(e.target.value)}
+                  placeholder={t('startModal.inputPlaceholder', 'Şehir ismi...')}
+                  maxLength={30}
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    borderRadius: '6px',
+                    padding: '8px 12px',
+                    color: '#ffffff',
+                    fontSize: '0.9rem',
+                    minWidth: '160px'
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveCityName()
+                  }}
+                />
+                <button
+                  type="button"
+                  className={styles.dangerButton}
+                  style={{
+                    backgroundColor: 'rgba(76, 175, 80, 0.15)',
+                    borderColor: 'rgba(76, 175, 80, 0.4)',
+                    color: '#4caf50'
+                  }}
+                  onClick={handleSaveCityName}
+                >
+                  {t('settings.saveCityName', 'Kaydet')}
+                </button>
+              </div>
             </div>
           </div>
         </div>

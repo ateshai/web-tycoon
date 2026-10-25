@@ -96,10 +96,9 @@ export const meetsRequirements = (requirements, ownedBuildings = [], researchedU
 
   // Count owned buildings by id/type
   const buildingCounts = ownedBuildings.reduce((counts, b) => {
-    const id = b.id || b.type
-    if (id) {
-      counts[id] = (counts[id] || 0) + 1
-      counts[id.toLowerCase()] = (counts[id.toLowerCase()] || 0) + 1
+    const key = (b.id || b.type || '').toLowerCase()
+    if (key) {
+      counts[key] = (counts[key] || 0) + 1
     }
     return counts
   }, {})

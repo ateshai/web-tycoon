@@ -23,6 +23,8 @@ export const useGameStore = create(
       notifications: [],
 
       // Game state
+      cityName: '',
+      isGameStarted: false,
       lastUpdate: Date.now(),
       lastExpenseTick: Date.now(),
       lastExpenseSummary: null,
@@ -37,11 +39,63 @@ export const useGameStore = create(
           activeResearch: null,
           completedResearch: null,
           notifications: [],
+          cityName: '',
+          isGameStarted: false,
           lastUpdate: Date.now(),
           lastExpenseTick: Date.now(),
           lastExpenseSummary: null,
           gameSpeed: 1
         })
+      },
+
+      startGame: (name) => {
+        const state = get()
+        if (state.cityName) {
+          state.resumeGame(name)
+        } else {
+          state.startNewGame(name)
+        }
+      },
+
+      startNewGame: (name) => {
+        const currentLang = i18n.language || 'tr'
+        const fallbackDefault = currentLang === 'en' ? 'New City' : 'Yeni Şehir'
+        const trimmed = (name || '').trim() || fallbackDefault
+        const now = Date.now()
+        set({
+          ...INITIAL_RESOURCES,
+          buildings: INITIAL_BUILDINGS,
+          upgrades: [],
+          activeResearch: null,
+          completedResearch: null,
+          notifications: [],
+          cityName: trimmed,
+          isGameStarted: true,
+          lastUpdate: now,
+          lastExpenseTick: now,
+          lastExpenseSummary: null,
+          gameSpeed: 1
+        })
+      },
+
+      resumeGame: (optionalName) => {
+        const currentLang = i18n.language || 'tr'
+        const fallbackDefault = currentLang === 'en' ? 'New City' : 'Yeni Şehir'
+        const trimmed = (optionalName || '').trim() || get().cityName || fallbackDefault
+        const now = Date.now()
+        set({
+          cityName: trimmed,
+          isGameStarted: true,
+          lastUpdate: now,
+          lastExpenseTick: now,
+        })
+      },
+
+      setCityName: (name) => {
+        const trimmed = (name || '').trim()
+        if (trimmed) {
+          set({ cityName: trimmed })
+        }
       },
 
       updateResources: () => {
@@ -458,6 +512,11 @@ export const useGameStore = create(
     }),
     {
       name: 'html-tycoon-game',
+      partialize: (state) => {
+        // Exclude isGameStarted so the simulation never starts automatically on page load
+        const { isGameStarted, ...persistedState } = state
+        return persistedState
+      },
     }
   )
 )

@@ -9,6 +9,7 @@ import GameLoop from './GameLoop'
 import BuildModal from '../UI/BuildModal'
 import ResearchCompleteModal from '../UI/ResearchCompleteModal'
 import ToastContainer from '../UI/ToastContainer'
+import StartModal from '../UI/StartModal'
 import { useGameStore } from '../../store/gameStore'
 
 import styles from './GameView.module.css'
@@ -17,8 +18,20 @@ const GameView = () => {
   const { t } = useTranslation()
   const [currentScreen, setCurrentScreen] = useState('city')
   const [isBuildOpen, setIsBuildOpen] = useState(false)
+  const [isRenameOpen, setIsRenameOpen] = useState(false)
   const activeResearch = useGameStore(state => state.activeResearch)
+  const cityName = useGameStore(state => state.cityName)
+  const isGameStarted = useGameStore(state => state.isGameStarted)
   const [, setTick] = useState(0)
+
+  // Dynamically update tab/window title when city name is defined
+  useEffect(() => {
+    if (cityName) {
+      document.title = `${cityName} | HTML Tycoon`
+    } else {
+      document.title = 'HTML Tycoon'
+    }
+  }, [cityName])
 
   // Re-render header progress bar smoothly while research is active
   useEffect(() => {
@@ -58,7 +71,23 @@ const GameView = () => {
     <GameLoop>
       <div className={styles.gameContainer}>
         <header className={styles.gameHeaderBar}>
-          {researchProgress ? (
+          <div className={styles.gameLogo}>
+            <span className={styles.logoIcon}>🏰</span>
+            <span className={styles.logoText}>{cityName || t('app.title')}</span>
+            {isGameStarted && (
+              <button
+                type="button"
+                className={styles.editNameBtn}
+                onClick={() => setIsRenameOpen(true)}
+                title={t('startModal.changeCityTitle', 'Şehir İsmini Değiştir')}
+                aria-label={t('startModal.changeCityTitle', 'Şehir İsmini Değiştir')}
+              >
+                ✏️
+              </button>
+            )}
+          </div>
+
+          {researchProgress && (
             <div className={styles.researchHeaderBanner}>
               <div className={styles.researchBannerInfo}>
                 <span className={styles.bannerIcon}>🔬</span>
@@ -73,11 +102,6 @@ const GameView = () => {
                   style={{ width: `${researchProgress.percent}%` }}
                 />
               </div>
-            </div>
-          ) : (
-            <div className={styles.gameLogo}>
-              <span className={styles.logoIcon}>🏰</span>
-              <span className={styles.logoText}>{t('app.title')}</span>
             </div>
           )}
         </header>
@@ -98,6 +122,11 @@ const GameView = () => {
         />
 
         <ResearchCompleteModal />
+        <StartModal
+          isOpen={!isGameStarted || isRenameOpen}
+          isEditing={isGameStarted && isRenameOpen}
+          onClose={() => setIsRenameOpen(false)}
+        />
         <ToastContainer />
       </div>
     </GameLoop>

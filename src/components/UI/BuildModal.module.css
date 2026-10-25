@@ -84,7 +84,7 @@
 }
 
 .buildingsSectionTitle {
-  margin: var(--spacing-md) 0 var(--spacing-sm);
+  margin: var(--spacing-md) 0 var(--spacing-xs);
 }
 
 .buildingsSectionTitle h3 {
@@ -92,11 +92,73 @@
   color: var(--text-primary);
 }
 
+/* Category Navigation Tabs */
+.categoryTabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px 10px 2px;
+  scrollbar-width: thin;
+}
+
+.categoryTab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.categoryTab:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.activeTab {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.25), rgba(33, 150, 243, 0.2));
+  border-color: #4caf50;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.25);
+}
+
+.tabIcon {
+  font-size: 1rem;
+}
+
+.tabLabel {
+  font-size: 0.85rem;
+}
+
+.tabBadge {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 9999px;
+  padding: 1px 7px;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.activeTab .tabBadge {
+  background: rgba(76, 175, 80, 0.4);
+  color: #ffffff;
+}
+
 .buildingsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--spacing-md);
-  margin: var(--spacing-md) 0 var(--spacing-xl);
+  margin: var(--spacing-sm) 0 var(--spacing-xl);
 }
 
 .buildingCard {
@@ -115,9 +177,86 @@
   border-color: rgba(255, 255, 255, 0.05);
 }
 
+.buildingCardHeader {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 8px;
+}
+
+.buildingTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.buildingCardIcon {
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius-sm);
+  padding: 4px 6px;
+  line-height: 1;
+}
+
 .buildingCardHeader h3 {
-  margin-bottom: var(--spacing-xs);
+  margin: 0;
+  font-size: 1.05rem;
   color: var(--text-primary);
+}
+
+.buildingCategoryTag {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Owned in City Badge */
+.ownedBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ownedActive {
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  color: #4caf50;
+}
+
+.ownedZero {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+.ownedIcon {
+  font-size: 0.8rem;
+}
+
+/* Empty Category State */
+.emptyCategoryState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--border-radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+.emptyCategoryIcon {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
 }
 
 .buildingCard p {

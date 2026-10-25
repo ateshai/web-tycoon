@@ -77,3 +77,44 @@ export const playTradeSound = (type = 'sell') => {
     // Graceful fallback if audio is not permitted or fails
   }
 }
+
+export const playGameStartSound = () => {
+  try {
+    const { soundEnabled, soundVolume = 0.7 } = useSettingsStore.getState()
+    if (!soundEnabled) return
+
+    const ctx = getAudioContext()
+    if (!ctx) return
+
+    const now = ctx.currentTime
+
+    // Triumphant ascending fanfare: C4 (261.63Hz) -> E4 (329.63Hz) -> G4 (392.00Hz) -> C5 (523.25Hz)
+    const notes = [261.63, 329.63, 392.00, 523.25]
+    const noteDuration = 0.11
+
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+
+      osc.type = 'triangle'
+      osc.frequency.setValueAtTime(freq, now + idx * noteDuration)
+
+      const volume = Math.min(1, Math.max(0, soundVolume * 0.28))
+      const startTime = now + idx * noteDuration
+      const endTime = startTime + (idx === notes.length - 1 ? 0.4 : noteDuration * 0.95)
+
+      gain.gain.setValueAtTime(0.001, startTime)
+      gain.gain.linearRampToValueAtTime(volume, startTime + 0.02)
+      gain.gain.exponentialRampToValueAtTime(0.0001, endTime)
+
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+
+      osc.start(startTime)
+      osc.stop(endTime)
+    })
+  } catch (e) {
+    // Graceful fallback
+  }
+}
+

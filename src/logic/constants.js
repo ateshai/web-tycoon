@@ -1,8 +1,19 @@
+// Building categories for organized menu navigation
+export const BUILDING_CATEGORIES = [
+  { id: 'all', icon: '🏛️' },
+  { id: 'residential', icon: '🏠' },
+  { id: 'gathering', icon: '⛏️' },
+  { id: 'crafting', icon: '⚙️' },
+  { id: 'sustenance', icon: '🌾' },
+]
+
 // Building costs and requirements
 export const BUILDINGS = {
   HOUSE: {
     id: 'house',
     name: 'House',
+    category: 'residential',
+    icon: '🏠',
     cost: {
       wood: 50,
     },
@@ -19,6 +30,8 @@ export const BUILDINGS = {
   WOODCUTTER: {
     id: 'woodcutter',
     name: 'Woodcutter',
+    category: 'gathering',
+    icon: '🪓',
     cost: {
       wood: 50,
     },
@@ -30,6 +43,8 @@ export const BUILDINGS = {
   STONEMASON: {
     id: 'stonemason',
     name: 'Stonemason',
+    category: 'gathering',
+    icon: '⛏️',
     cost: {
       wood: 75,
     },
@@ -44,6 +59,8 @@ export const BUILDINGS = {
   CARPENTER: {
     id: 'carpenter',
     name: 'Carpenter',
+    category: 'crafting',
+    icon: '🪚',
     cost: {
       money: 50,
       wood: 100,
@@ -62,6 +79,8 @@ export const BUILDINGS = {
   WELL: {
     id: 'well',
     name: 'Water Well',
+    category: 'sustenance',
+    icon: '💧',
     cost: {
       stone: 10,
       wood: 5,
@@ -74,6 +93,8 @@ export const BUILDINGS = {
   HUNTER: {
     id: 'hunter',
     name: 'Hunter',
+    category: 'sustenance',
+    icon: '🏹',
     cost: {
       wood: 15,
       stone: 5,
